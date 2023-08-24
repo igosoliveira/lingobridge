@@ -1,0 +1,27 @@
+{
+  "name": "lingobridge-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "@types/node": "^20.5.1",
+    "dotenv": "^16.3.1",
+    "ts-jest": "^29.1.1"
+  },
+  "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/string-similarity": "^4.0.0",
+    "crypto-ts": "^1.0.2",
+    "he": "^1.2.0",
+    "mongoose": "^7.4.4",
+    "openai": "^4.2.0",
+    "string-similarity": "^4.0.4"
+  }
+}

@@ -1,0 +1,37 @@
+{
+    "status": "success",
+    "message": "Texts retrieved successfully",
+    "data": [
+        {
+            "id": "text1",
+            "title": "Sample Text 1",
+            "content": "This is the content of sample text 1.",
+            "audio_url": "http://example.com/audio1.mp3",
+            "created_at": "2023-08-20T12:00:00Z",
+            "updated_at": "2023-08-21T15:30:00Z",
+            "language_id": "en",
+            "translations": [
+                {
+                    "id": "trans1",
+                    "language_id": "es", 
+                    "translated_content": "Este es el contenido de la muestra de texto 1 en español."
+                },
+                {
+                    "id": "trans2",
+                    "language_id": "fr", 
+                    "translated_content": "Ceci est le contenu de l'échantillon de texte 1 en français."
+                }
+            ]
+        },
+        {
+            "id": "text2",
+            "title": "Sample Text 2",
+            "content": "This is the content of sample text 2.",
+            "audio_url": "http://example.com/audio2.mp3",
+            "created_at": "2023-08-22T10:00:00Z",
+            "updated_at": "2023-08-23T13:15:00Z",
+            "language_id": "en",
+            "translations": []
+        }
+    ]
+}
