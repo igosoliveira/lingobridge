@@ -1,4 +1,4 @@
-import { TextGeneratorGateway } from "../../application/gateways/TextGenerationGateway";
+import { TextGeneratorGateway } from "../../../application/gateways/TextGeneratorGateway";
 import OpenAI from "openai";
 
 export class OpeniaGateway implements TextGeneratorGateway {

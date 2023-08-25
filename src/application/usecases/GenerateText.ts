@@ -1,4 +1,4 @@
-import { TextGeneratorGateway } from "../gateways/TextGenerationGateway";
+import { TextGeneratorGateway } from "../gateways/TextGeneratorGateway";
 
 export class GenerateText {
   constructor(readonly textGeneratorGateway: TextGeneratorGateway) {}

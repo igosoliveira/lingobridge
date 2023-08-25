@@ -1,17 +1,21 @@
-import { AudioGeneratorGateway } from "../gateways/AudioGenerationGateway"
+import { AudioGeneratorGateway } from "../gateways/AudioGeneratorGateway";
 
 export class GenerateAudio {
-    constructor(readonly audioGeneratorGateway: AudioGeneratorGateway) {
-    }
+  constructor(readonly audioGeneratorGateway: AudioGeneratorGateway) {}
 
-    async execute(input: Input): Promise<Output> {
-        return this.audioGeneratorGateway.generator(input.language, input.text)
-    }
+  async execute(input: Input): Promise<Output> {
+    const audio = await this.audioGeneratorGateway.generatorAudio(
+      input.language,
+      input.text
+    );
+
+    return audio;
+  }
 }
 
 type Input = {
-    text: string,
-    language: string
-}
+  language: string;
+  text: string;
+};
 
-type Output = Buffer
+type Output = any;

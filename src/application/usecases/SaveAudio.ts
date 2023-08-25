@@ -1,19 +1,22 @@
-import { AudioRepository } from "../repositories/AudioRepository"
+import { AudioRepository } from "../repositories/AudioRepository";
 
 export class SaveAudio {
-    constructor(readonly audioRepository: AudioRepository) {
+  constructor(readonly audioRepository: AudioRepository) {}
 
-    }
-
-    async execute(input: Input): Promise<Output> {
-        await this.audioRepository.save(input.buffer, input.name)
-        return this.audioRepository.getUrl(input.name)
-    }
+  async execute(input: Input): Promise<Output> {
+    const audioUrl = await this.audioRepository.save(
+      input.audioBuffer,
+      input.name,
+      input.language
+    );
+    return audioUrl;
+  }
 }
 
 type Input = {
-    buffer: Buffer
-    name: string
-}
+  audioBuffer: any ;
+  name: string;
+  language: string;
+};
 
-type Output = String
+type Output = String;

@@ -16,6 +16,7 @@
     "ts-jest": "^29.1.1"
   },
   "dependencies": {
+    "@types/aws-sdk": "^2.7.0",
     "@types/mongoose": "^5.11.97",
     "@types/string-similarity": "^4.0.0",
     "crypto-ts": "^1.0.2",

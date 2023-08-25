@@ -6,19 +6,25 @@ export class Text {
   content: string;
   audio_url: string;
   language_id: string;
+  created_at: Date;
+  updated_at: Date | null = null;
 
   constructor(
     id: string,
     title: string,
     content: string,
     audio_url: string,
-    language_id: string
+    language_id: string,
+    created_at: Date,
+    updated_at: Date | null = null
   ) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.audio_url = audio_url;
     this.language_id = language_id;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
   }
 
   static create(
@@ -28,6 +34,15 @@ export class Text {
     language_id: string
   ) {
     const idText = UUID.create();
-    return new Text(idText, title, content, audio_url, language_id);
+    const currentTime = new Date();
+    return new Text(
+      idText,
+      title,
+      content,
+      audio_url,
+      language_id,
+      currentTime,
+      currentTime
+    );
   }
 }
