@@ -2,7 +2,7 @@ import { TextRepository } from "../../../application/repositories/TextRepository
 import { Text } from "../../../domain/text/Text";
 import TextModel from "./model/TextModel";
 
-export class TextRepositoryDatabase implements TextRepository {
+export class TextMongoRepository implements TextRepository {
   save(text: Text): Promise<Text> {
     return TextModel.create(text);
   }

@@ -1,6 +1,6 @@
 import { Language } from "../../domain/language/Language";
 
 export interface LanguageRepository {
-  findById(idLanguage: String): Promise<Language>;
-  save(language: Language): Promise<void>;
+  findById(id: String): Promise<Language | null>;
+  save(language: Language): Promise<Language | null>;
 }
