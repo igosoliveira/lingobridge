@@ -19,4 +19,4 @@ type Input = {
   language: string;
 };
 
-type Output = String;
+type Output = string;
