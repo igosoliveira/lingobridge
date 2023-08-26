@@ -15,7 +15,7 @@ const textSchema = new Schema<TextDocument>(
     id: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    audio_url: { type: String, required: true },
+    audio_url: { type: String, required: false },
     language_id: { type: String, required: true },
     created_at: { type: Date, required: true },
     updated_at: { type: Date, required: false },
