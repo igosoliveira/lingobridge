@@ -3,6 +3,9 @@ import { Text } from "../../../domain/text/Text";
 import TextModel from "./model/TextModel";
 
 export class TextMongoRepository implements TextRepository {
+  findOne(find: Object): Promise<Text | null> {
+    return TextModel.findOne(find);
+  }
   save(text: Text): Promise<Text> {
     return TextModel.create(text);
   }
