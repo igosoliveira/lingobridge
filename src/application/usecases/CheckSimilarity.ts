@@ -1,22 +1,39 @@
-import { TextSimilarityGateway } from "../gateways/TextSimilarityGateway"
+import { TextSimilarityGateway } from "../gateways/TextSimilarityGateway";
+import { TextRepository } from "../repositories/TextRepository";
+import { Text } from "../../domain/text/Text";
 
 export class CheckSimilarity {
+  constructor(
+    readonly textSimilarityGateway: TextSimilarityGateway,
+    readonly textRepository: TextRepository
+  ) {}
 
-    constructor(readonly textSimilarityGateway: TextSimilarityGateway) {
+  async execute(input: Input): Output {
+    const MAXIMUM_SIMILARITY: Number = 0.6;
+    let isSimilarity: boolean = false;
+
+    const textFound = await this.textRepository.findOne({ title: input.title });
+    const texts = await this.textRepository.getAll(input.language);
+
+    for (let textDatabase of texts) {
+      if (textFound?.id === textDatabase.id) {
+        continue;
+      }
+      const similarity = this.textSimilarityGateway.calculate(
+        input.title,
+        textDatabase.title
+      );
+      isSimilarity = similarity > MAXIMUM_SIMILARITY;
+      if (isSimilarity) break;
     }
 
-    execute(input: Input): Output {
-        const MAXIMUM_SIMILARITY: Number = 0.6
-        const similatity = this.textSimilarityGateway.calculate(input.text1, input.text2)
-        return similatity > MAXIMUM_SIMILARITY;
-    }
-
+    return isSimilarity;
+  }
 }
-
 
 type Input = {
-    text1: string
-    text2: string
-}
+  language: string;
+  title: string;
+};
 
-type Output = boolean
+type Output = Promise<boolean>;
