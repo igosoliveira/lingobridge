@@ -9,6 +9,7 @@ export class S3Repository implements AudioRepository {
       Bucket: `${process.env.AWS_BUCKET}`,
       Key: `${process.env.AWS_KEY_PREFIX}/${language}/${name}.mp3`,
       Body: audio,
+      ACL: 'public-read'
     }).promise();
     const audioUrl = this.getUrl(name, language);
     return audioUrl;

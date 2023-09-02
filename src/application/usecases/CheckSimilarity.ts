@@ -1,6 +1,5 @@
 import { TextSimilarityGateway } from "../gateways/TextSimilarityGateway";
 import { TextRepository } from "../repositories/TextRepository";
-import { Text } from "../../domain/text/Text";
 
 export class CheckSimilarity {
   constructor(

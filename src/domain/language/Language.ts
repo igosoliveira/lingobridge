@@ -14,8 +14,7 @@ export class Language {
   }
 
   static create(code: string) {
-    const idLanguage = UUID.create();
     const currentTime = new Date();
-    return new Language(idLanguage, code, currentTime, currentTime);
+    return new Language(code, code, currentTime, currentTime);
   }
 }
