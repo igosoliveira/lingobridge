@@ -75,7 +75,7 @@ export class GenerateDefaultText {
 
   static async execute(language: string) {
     try {
-      console.log("Starting all steps...");
+      console.log("starting text creation...");
 
       const textGeneration = await GenerateDefaultText.createText(language);
       console.log("Text generated:", textGeneration);

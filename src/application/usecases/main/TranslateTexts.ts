@@ -2,7 +2,6 @@ import { SaveLanguage } from "../language/SaveLanguage";
 import { SaveText } from "../text/SaveText";
 import { LanguageMongoRepository } from "../../../infrastructure/repositories/mongodb/LanguageMongoRepository";
 import { TextMongoRepository } from "../../../infrastructure/repositories/mongodb/TextMongoRepository";
-import { GetTexts } from "../text/GetTexts";
 import { OpeniaTranslateGateway } from "../../../infrastructure/gateways/openia/OpeniaTranslateGateway";
 import { SaveTranslation } from "../translations/SaveTranslation";
 import { TranslatorMongoRepository } from "../../../infrastructure/repositories/mongodb/TranslatorMongoRepository";
@@ -20,7 +19,7 @@ export class TranslateTexts {
     return saveLanguage.execute({ code: language });
   }
 
-  static async getTexts(language: string) {
+  static async getUntranslatedTexts(language: string) {
     const textMongoRepository = new TextMongoRepository();
     const getTexts = new FindUntranslatedText(textMongoRepository);
     return getTexts.execute({ language });
@@ -67,7 +66,7 @@ export class TranslateTexts {
       await this.createLanguage(targetLanguage);
       console.log(`Language "${targetLanguage}" created.`);
 
-      const texts = await this.getTexts(sourceLanguage);
+      const texts = await this.getUntranslatedTexts(sourceLanguage);
 
       console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
 

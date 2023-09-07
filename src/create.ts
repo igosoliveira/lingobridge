@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env" });
-import { CreateTextAndAudio } from "./application/usecases/main/GenerateDefaultText";
+import { GenerateDefaultText } from "./application/usecases/main/GenerateDefaultText";
 import MongoDB from "./infrastructure/repositories/mongodb/mongodb";
 
 MongoDB.connect();
@@ -15,7 +15,7 @@ const progress = {
 };
 
 const intervalo = setInterval(async () => {
-  const textCreated = await CreateTextAndAudio.execute("en-US");
+  const textCreated = await GenerateDefaultText.execute("en-US");
   if (textCreated) {
     progress.success++;
   } else {
@@ -24,6 +24,7 @@ const intervalo = setInterval(async () => {
   config.executions++;
   console.log(`execultando: ${config.executions}`);
   console.log(progress);
+  console.log("create text process completed.");
   if (config.executions === config.maxExecutions) {
     console.log(progress);
     clearInterval(intervalo);
