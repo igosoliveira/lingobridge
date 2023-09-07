@@ -1,5 +1,5 @@
-import { LanguageRepository } from "../repositories/LanguageRepository";
-import { Language } from "../../domain/language/Language";
+import { LanguageRepository } from "../../repositories/LanguageRepository";
+import { Language } from "../../../domain/language/Language";
 
 export class SaveLanguage {
   constructor(readonly languageRepository: LanguageRepository) {}

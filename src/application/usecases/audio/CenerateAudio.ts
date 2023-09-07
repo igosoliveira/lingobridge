@@ -1,4 +1,4 @@
-import { AudioGeneratorGateway } from "../gateways/AudioGeneratorGateway";
+import { AudioGeneratorGateway } from "../../gateways/AudioGeneratorGateway";
 
 export class GenerateAudio {
   constructor(readonly audioGeneratorGateway: AudioGeneratorGateway) {}

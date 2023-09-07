@@ -1,22 +1,22 @@
-import { TextGeneratorGateway } from "../../../application/gateways/TextGeneratorGateway";
 import OpenAI from "openai";
+import { TranslatorGateway } from "../../../application/gateways/TranslatorGateway";
 const he = require("he");
 
-export class OpeniaGateway implements TextGeneratorGateway {
+export class OpeniaTranslateGateway implements TranslatorGateway {
   openai: OpenAI = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  async generate(
+  async translate(
     language: string,
+    content: string,
+    title: string
   ): Promise<{ title: string; content: string }> {
-
-    const subject = "about "+" curiosity of the world "
     const completion = await this.openai.chat.completions.create({
       messages: [
         {
           role: "user",
-          content: `create an interesting text in ${language} ${subject} and returns ausing JSON format, with the structure {title:"", content:""}`,
+          content: `translate the title ${title} and text ${content} to ${language} and returns ausing JSON format, with the structure {title:"", content:""}`,
         },
       ],
       model: "gpt-3.5-turbo",

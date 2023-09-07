@@ -1,4 +1,4 @@
-import { AudioRepository } from "../repositories/AudioRepository";
+import { AudioRepository } from "../../repositories/AudioRepository";
 
 export class SaveAudio {
   constructor(readonly audioRepository: AudioRepository) {}

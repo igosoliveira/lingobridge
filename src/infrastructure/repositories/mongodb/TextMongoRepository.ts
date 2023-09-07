@@ -1,6 +1,7 @@
 import { TextRepository } from "../../../application/repositories/TextRepository";
 import { Text } from "../../../domain/text/Text";
 import TextModel from "./model/TextModel";
+import TranslationModel from "./model/TranslationModel";
 
 export class TextMongoRepository implements TextRepository {
   findOne(find: Object): Promise<Text | null> {
@@ -11,5 +12,12 @@ export class TextMongoRepository implements TextRepository {
   }
   getAll(language: string): Promise<Text[]> {
     return TextModel.find({ language_id: language });
+  }
+
+  async findUntranslated(language: string = "en-US"): Promise<Text[]> {
+    return TextModel.find({
+      language_id: language,
+      id: { $nin: await TranslationModel.distinct("source_text_id") },
+    });
   }
 }

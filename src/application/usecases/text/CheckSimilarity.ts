@@ -1,5 +1,5 @@
-import { TextSimilarityGateway } from "../gateways/TextSimilarityGateway";
-import { TextRepository } from "../repositories/TextRepository";
+import { TextSimilarityGateway } from "../../gateways/TextSimilarityGateway";
+import { TextRepository } from "../../repositories/TextRepository";
 
 export class CheckSimilarity {
   constructor(
@@ -11,11 +11,14 @@ export class CheckSimilarity {
     const MAXIMUM_SIMILARITY: Number = 0.6;
     let isSimilarity: boolean = false;
 
-    const textFound = await this.textRepository.findOne({ title: input.title });
+    const textFound = await this.textRepository.findOne({
+      title: input.title,
+      content: input.content,
+    });
     const texts = await this.textRepository.getAll(input.language);
 
     for (let textDatabase of texts) {
-      if (textFound?.id === textDatabase.id) {
+      if (textFound) {
         continue;
       }
       const similarity = this.textSimilarityGateway.calculate(
@@ -23,7 +26,10 @@ export class CheckSimilarity {
         textDatabase.title
       );
       isSimilarity = similarity > MAXIMUM_SIMILARITY;
-      if (isSimilarity) break;
+      if (isSimilarity) {
+        console.log(`similarity: ${similarity}`);
+        break;
+      }
     }
 
     return isSimilarity;
@@ -33,6 +39,7 @@ export class CheckSimilarity {
 type Input = {
   language: string;
   title: string;
+  content: string;
 };
 
 type Output = Promise<boolean>;

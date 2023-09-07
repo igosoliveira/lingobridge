@@ -1,17 +1,17 @@
-import { GenerateAudio } from "./CenerateAudio";
-import { CheckSimilarity } from "./CheckSimilarity";
-import { GenerateText } from "./GenerateText";
-import { SaveAudio } from "./SaveAudio";
-import { SaveLanguage } from "./SaveLanguage";
-import { SaveText } from "./SaveText";
-import PollyService from "../../infrastructure/gateways/aws/PollyService";
-import { StringSimilarityGateway } from "../../infrastructure/gateways/libraries/StringSimilarityGateway";
-import { OpeniaGateway } from "../../infrastructure/gateways/openia/OpeniaGateway";
-import { S3Repository } from "../../infrastructure/repositories/aws/S3Repository";
-import { LanguageMongoRepository } from "../../infrastructure/repositories/mongodb/LanguageMongoRepository";
-import { TextMongoRepository } from "../../infrastructure/repositories/mongodb/TextMongoRepository";
+import { GenerateAudio } from "../audio/CenerateAudio";
+import { CheckSimilarity } from "../text/CheckSimilarity";
+import { GenerateText } from "../text/GenerateText";
+import { SaveAudio } from "../audio/SaveAudio";
+import { SaveLanguage } from "../language/SaveLanguage";
+import { SaveText } from "../text/SaveText";
+import PollyService from "../../../infrastructure/gateways/aws/PollyService";
+import { StringSimilarityGateway } from "../../../infrastructure/gateways/libraries/StringSimilarityGateway";
+import { OpeniaGateway } from "../../../infrastructure/gateways/openia/OpeniaGateway";
+import { S3Repository } from "../../../infrastructure/repositories/aws/S3Repository";
+import { LanguageMongoRepository } from "../../../infrastructure/repositories/mongodb/LanguageMongoRepository";
+import { TextMongoRepository } from "../../../infrastructure/repositories/mongodb/TextMongoRepository";
 
-export class CreateTextAndAudio {
+export class GenerateDefaultText {
   static async createLanguage(language: string) {
     const languageMongoRepository = new LanguageMongoRepository();
     const saveLanguage = new SaveLanguage(languageMongoRepository);
@@ -26,7 +26,7 @@ export class CreateTextAndAudio {
     return textGeneration;
   }
 
-  static async checkSimilarity(language: string, title: string) {
+  static async checkSimilarity(language: string, title: string, content: string) {
     const stringSimilarityGateway = new StringSimilarityGateway();
     const textMongoRepository = new TextMongoRepository();
 
@@ -34,7 +34,7 @@ export class CreateTextAndAudio {
       stringSimilarityGateway,
       textMongoRepository
     );
-    const similarity = await checkSimilarity.execute({ language, title });
+    const similarity = await checkSimilarity.execute({ language, title, content });
     return similarity;
   }
 
@@ -73,16 +73,17 @@ export class CreateTextAndAudio {
     return textCreated;
   }
 
-  static async run(language: string) {
+  static async execute(language: string) {
     try {
       console.log("Starting all steps...");
 
-      const textGeneration = await CreateTextAndAudio.createText(language);
+      const textGeneration = await GenerateDefaultText.createText(language);
       console.log("Text generated:", textGeneration);
 
-      const similarity = await CreateTextAndAudio.checkSimilarity(
+      const similarity = await GenerateDefaultText.checkSimilarity(
         language,
-        textGeneration.title
+        textGeneration.title,
+        textGeneration.content
       );
       console.log("similarity generated:", similarity);
 
@@ -90,11 +91,11 @@ export class CreateTextAndAudio {
         throw Error("ERROR similarity text");
       }
 
-      const languageCreated = await CreateTextAndAudio.createLanguage(language);
+      const languageCreated = await GenerateDefaultText.createLanguage(language);
       console.log("Language created:", languageCreated);
 
       process.stdout.write("Generating audio ");
-      const audioUrl = await CreateTextAndAudio.createAudio(
+      const audioUrl = await GenerateDefaultText.createAudio(
         language,
         textGeneration.title,
         textGeneration.content
@@ -102,7 +103,7 @@ export class CreateTextAndAudio {
       console.log("Audio saved:", audioUrl);
 
       process.stdout.write("Saving text ");
-      const textCreated = await CreateTextAndAudio.saveText(
+      const textCreated = await GenerateDefaultText.saveText(
         language,
         textGeneration.title,
         textGeneration.content,

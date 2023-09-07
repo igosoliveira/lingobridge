@@ -1,5 +1,5 @@
-import { TextRepository } from "../repositories/TextRepository";
-import { Text } from "../../domain/text/Text";
+import { TextRepository } from "../../repositories/TextRepository";
+import { Text } from "../../../domain/text/Text";
 
 export class SaveText {
   constructor(readonly textRepository: TextRepository) {}
