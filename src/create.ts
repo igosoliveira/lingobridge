@@ -30,4 +30,4 @@ const intervalo = setInterval(async () => {
     clearInterval(intervalo);
     return;
   }
-}, 35000);
+}, 30000);

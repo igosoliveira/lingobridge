@@ -77,10 +77,12 @@ export class GenerateDefaultText {
     try {
       console.log("starting text creation...");
 
-      const textGeneration = await GenerateDefaultText.createText(language);
+      console.log("Generating text");
+      const textGeneration = await this.createText(language);
       console.log("Text generated:", textGeneration);
 
-      const similarity = await GenerateDefaultText.checkSimilarity(
+      console.log("Generating similarity");
+      const similarity = await this.checkSimilarity(
         language,
         textGeneration.title,
         textGeneration.content
@@ -91,24 +93,27 @@ export class GenerateDefaultText {
         throw Error("ERROR similarity text");
       }
 
-      const languageCreated = await GenerateDefaultText.createLanguage(language);
+      console.log("Creating language");
+      const languageCreated = await this.createLanguage(language);
       console.log("Language created:", languageCreated);
 
-      process.stdout.write("Generating audio ");
-      const audioUrl = await GenerateDefaultText.createAudio(
+      console.log("Generating audio ");
+      const audioUrl = await this.createAudio(
         language,
         textGeneration.title,
         textGeneration.content
       );
       console.log("Audio saved:", audioUrl);
 
-      process.stdout.write("Saving text ");
-      const textCreated = await GenerateDefaultText.saveText(
+      console.log("Saving text ");
+      const textCreated = await this.saveText(
         language,
         textGeneration.title,
         textGeneration.content,
         audioUrl
       );
+      console.log("Text saved:", audioUrl);
+
       return textCreated
     } catch (error) {
       console.error("An error occurred:", error);
