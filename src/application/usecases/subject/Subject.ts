@@ -6,12 +6,12 @@ export class SaveSubject {
 
   async execute(input: Input): Promise<Output> {
     const subject = Subject.create(input.subject);
-    const subjectFound = await this.subjectRepository.findById(subject.id);
+    const subjectFound = await this.subjectRepository.findOne(input.subject);
     if (!subjectFound) {
       await this.subjectRepository.save(subject);
       return { id: subject.id };
     }
-    return { id: subject.id };
+    return { id: subject.id }
   }
 }
 

@@ -136,7 +136,7 @@ export class GenerateDefaultText {
         audioUrl,
         subjectCreated.id
       );
-      console.log("Text saved:", audioUrl);
+      console.log("Text saved:", textCreated);
 
       return textCreated;
     } catch (error) {

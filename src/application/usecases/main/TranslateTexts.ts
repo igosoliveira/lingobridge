@@ -29,7 +29,8 @@ export class TranslateTexts {
     language: string,
     title: string,
     content: string,
-    audioUrl: string
+    audioUrl: string,
+    subjectId:string
   ) {
     const textMongoRepository = new TextMongoRepository();
     const saveText = new SaveText(textMongoRepository);
@@ -38,6 +39,7 @@ export class TranslateTexts {
       title: title,
       content: content,
       audio_url: audioUrl,
+      subject_id:subjectId
     });
   }
 
@@ -86,6 +88,7 @@ export class TranslateTexts {
           targetLanguage,
           translatedText.title,
           translatedText.content,
+          text.subject_id,
           ""
         );
 
