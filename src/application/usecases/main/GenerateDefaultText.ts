@@ -10,8 +10,17 @@ import { OpeniaGateway } from "../../../infrastructure/gateways/openia/OpeniaGat
 import { S3Repository } from "../../../infrastructure/repositories/aws/S3Repository";
 import { LanguageMongoRepository } from "../../../infrastructure/repositories/mongodb/LanguageMongoRepository";
 import { TextMongoRepository } from "../../../infrastructure/repositories/mongodb/TextMongoRepository";
+import { SubjectMongoRepository } from "../../../infrastructure/repositories/mongodb/SubjectMongoRepository";
+import { SaveSubject } from "../subject/Subject";
 
 export class GenerateDefaultText {
+  static async createSubject(subject: string) {
+    const SubjectRepository = new SubjectMongoRepository();
+    const saveSubject = new SaveSubject(SubjectRepository);
+    const subjectCreated = await saveSubject.execute({ subject });
+    return subjectCreated;
+  }
+
   static async createLanguage(language: string) {
     const languageMongoRepository = new LanguageMongoRepository();
     const saveLanguage = new SaveLanguage(languageMongoRepository);
@@ -19,14 +28,18 @@ export class GenerateDefaultText {
     return languageCreated;
   }
 
-  static async createText(language: string) {
+  static async createText(language: string, subject: string = "") {
     const openiaGateway = new OpeniaGateway();
     const generateText = new GenerateText(openiaGateway);
-    const textGeneration = await generateText.execute({ language });
+    const textGeneration = await generateText.execute({ language, subject });
     return textGeneration;
   }
 
-  static async checkSimilarity(language: string, title: string, content: string) {
+  static async checkSimilarity(
+    language: string,
+    title: string,
+    content: string
+  ) {
     const stringSimilarityGateway = new StringSimilarityGateway();
     const textMongoRepository = new TextMongoRepository();
 
@@ -34,7 +47,11 @@ export class GenerateDefaultText {
       stringSimilarityGateway,
       textMongoRepository
     );
-    const similarity = await checkSimilarity.execute({ language, title, content });
+    const similarity = await checkSimilarity.execute({
+      language,
+      title,
+      content,
+    });
     return similarity;
   }
 
@@ -60,7 +77,8 @@ export class GenerateDefaultText {
     language: string,
     title: string,
     content: string,
-    audioUrl: string
+    audioUrl: string,
+    subjectId:string
   ) {
     const textMongoRepository = new TextMongoRepository();
     const saveText = new SaveText(textMongoRepository);
@@ -69,16 +87,17 @@ export class GenerateDefaultText {
       title: title,
       content: content,
       audio_url: audioUrl,
+      subject_id: subjectId
     });
     return textCreated;
   }
 
-  static async execute(language: string) {
+  static async execute(language: string, subject: string = "") {
     try {
       console.log("starting text creation...");
 
       console.log("Generating text");
-      const textGeneration = await this.createText(language);
+      const textGeneration = await this.createText(language, subject);
       console.log("Text generated:", textGeneration);
 
       console.log("Generating similarity");
@@ -97,6 +116,10 @@ export class GenerateDefaultText {
       const languageCreated = await this.createLanguage(language);
       console.log("Language created:", languageCreated);
 
+      console.log("Creating subject");
+      const subjectCreated = await this.createSubject(subject);
+      console.log("Subject created:", subjectCreated);
+
       console.log("Generating audio ");
       const audioUrl = await this.createAudio(
         language,
@@ -110,11 +133,12 @@ export class GenerateDefaultText {
         language,
         textGeneration.title,
         textGeneration.content,
-        audioUrl
+        audioUrl,
+        subjectCreated.id
       );
       console.log("Text saved:", audioUrl);
 
-      return textCreated
+      return textCreated;
     } catch (error) {
       console.error("An error occurred:", error);
     }

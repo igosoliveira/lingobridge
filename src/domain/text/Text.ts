@@ -6,6 +6,8 @@ export class Text {
   content: string;
   audio_url: string;
   language_id: string;
+  subject_id: string;
+
   created_at: Date;
   updated_at: Date | null = null;
 
@@ -15,6 +17,7 @@ export class Text {
     content: string,
     audio_url: string,
     language_id: string,
+    subject_id: string,
     created_at: Date,
     updated_at: Date | null = null
   ) {
@@ -23,6 +26,7 @@ export class Text {
     this.content = content;
     this.audio_url = audio_url;
     this.language_id = language_id;
+    this.subject_id = subject_id;
     this.created_at = created_at;
     this.updated_at = updated_at;
   }
@@ -31,7 +35,8 @@ export class Text {
     title: string,
     content: string,
     audio_url: string,
-    language_id: string
+    language_id: string,
+    subject_id: string
   ) {
     const idText = UUID.create();
     const currentTime = new Date();
@@ -41,6 +46,7 @@ export class Text {
       content,
       audio_url,
       language_id,
+      subject_id,
       currentTime,
       currentTime
     );

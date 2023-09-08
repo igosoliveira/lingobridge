@@ -9,14 +9,15 @@ export class OpeniaGateway implements TextGeneratorGateway {
 
   async generate(
     language: string,
+    subject: string = ""
   ): Promise<{ title: string; content: string }> {
-
-    const subject = "about "+" curiosity of the world "
     const completion = await this.openai.chat.completions.create({
       messages: [
         {
           role: "user",
-          content: `create an interesting text in ${language} ${subject} and returns ausing JSON format, with the structure {title:"", content:""}`,
+          content: `create an interesting text in ${language} ${
+            subject ? "about " + subject : ""
+          } and returns ausing JSON format, with the structure {title:"", content:""}`,
         },
       ],
       model: "gpt-3.5-turbo",

@@ -9,7 +9,8 @@ export class SaveText {
       input.title,
       input.content,
       input.audio_url,
-      input.language_id
+      input.language_id,
+      input.subject_id
     );
 
     await this.textRepository.save(text);
@@ -23,6 +24,7 @@ type Input = {
   title: string;
   content: string;
   audio_url: string;
+  subject_id: string
 };
 
 type Output = {

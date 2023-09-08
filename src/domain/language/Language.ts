@@ -1,5 +1,3 @@
-import UUID from "../id/uuid";
-
 export class Language {
   id: string;
   code: string;

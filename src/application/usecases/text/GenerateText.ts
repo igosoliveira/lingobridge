@@ -5,7 +5,7 @@ export class GenerateText {
 
   async execute(input: Input): Promise<Output> {
     const MIN = 250;
-    const text = await this.textGeneratorGateway.generate(input.language);
+    const text = await this.textGeneratorGateway.generate(input.language , input.subject );
     if (text.content?.length < MIN) {
       throw Error(`ERROR text less than ${MIN} characters`);
     }
@@ -15,6 +15,7 @@ export class GenerateText {
 
 type Input = {
   language: string;
+  subject: string
 };
 
 type Output = {

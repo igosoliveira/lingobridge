@@ -14,8 +14,48 @@ const progress = {
   success: 0,
 };
 
+const subjects: string[] = [
+  "Technology",
+  "Science",
+  "Politics",
+  "Culture",
+  "Health",
+  "Environment",
+  "Education",
+  "Art",
+  "Economy",
+  "History",
+  "Philosophy",
+  "Religion",
+  "Sports",
+  "Travel",
+  "Food and Cuisine",
+  "Fashion",
+  "Entertainment",
+  "Automobiles",
+  "Music",
+  "Literature",
+  "Psychology",
+  "Trends",
+  "Family and Relationships",
+  "Business",
+  "Information Technology",
+  "Personal Development",
+  "Wellness",
+  "Diversity and Inclusion",
+  "Time Management",
+  "Outdoor Adventures",
+];
+let indexSubjects = 0;
 const intervalo = setInterval(async () => {
-  const textCreated = await GenerateDefaultText.execute("en-US");
+  const textCreated = await GenerateDefaultText.execute(
+    "en-US",
+    subjects[indexSubjects++]
+  );
+
+  if (indexSubjects > subjects.length - 1) {
+    indexSubjects = 0;
+  }
   if (textCreated) {
     progress.success++;
   } else {

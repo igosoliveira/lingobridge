@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 interface TextDocument extends Document {
   id: string;
@@ -6,6 +6,7 @@ interface TextDocument extends Document {
   content: string;
   audio_url: string;
   language_id: string;
+  subject_id: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -17,12 +18,13 @@ const textSchema = new Schema<TextDocument>(
     content: { type: String, required: true },
     audio_url: { type: String, required: false },
     language_id: { type: String, required: true },
+    subject_id: { type: String, required: false },
     created_at: { type: Date, required: true },
     updated_at: { type: Date, required: false },
   },
   { timestamps: false } // Disable Mongoose's default timestamps behavior
 );
 
-const TextModel = mongoose.model<TextDocument>('Text', textSchema);
+const TextModel = mongoose.model<TextDocument>("Text", textSchema);
 
 export default TextModel;
