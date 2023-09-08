@@ -30,7 +30,7 @@ export class TranslateTexts {
     title: string,
     content: string,
     audioUrl: string,
-    subjectId:string
+    subjectId: string
   ) {
     const textMongoRepository = new TextMongoRepository();
     const saveText = new SaveText(textMongoRepository);
@@ -39,7 +39,7 @@ export class TranslateTexts {
       title: title,
       content: content,
       audio_url: audioUrl,
-      subject_id:subjectId
+      subject_id: subjectId,
     });
   }
 
@@ -58,21 +58,21 @@ export class TranslateTexts {
   }
 
   static async execute(targetLanguage: string) {
-    try {
-      const sourceLanguage = "en-US";
+    const sourceLanguage = "en-US";
 
-      console.log(
-        `Starting translation process for language: "${targetLanguage}"`
-      );
+    console.log(
+      `Starting translation process for language: "${targetLanguage}"`
+    );
 
-      await this.createLanguage(targetLanguage);
-      console.log(`Language "${targetLanguage}" created.`);
+    await this.createLanguage(targetLanguage);
+    console.log(`Language "${targetLanguage}" created.`);
 
-      const texts = await this.getUntranslatedTexts(sourceLanguage);
+    const texts = await this.getUntranslatedTexts(sourceLanguage);
 
-      console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
+    console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
 
-      for (const text of texts) {
+    for (const text of texts) {
+      try {
         console.log(`Translating text: "${text.title}"`);
 
         const translatedText = await this.translate(
@@ -100,12 +100,12 @@ export class TranslateTexts {
           translatedTextCreated.id
         );
         console.log(`Translation for "${text.title}" saved.`);
-        await this.pause(10);
+        console.log("Translation process completed.");
+      } catch (error) {
+        console.log(error);
       }
 
-      console.log("Translation process completed.");
-    } catch (error) {
-      console.error("An error occurred:", error);
+      await this.pause(30);
     }
   }
 }
