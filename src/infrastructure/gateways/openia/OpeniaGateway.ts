@@ -17,7 +17,7 @@ export class OpeniaGateway implements TextGeneratorGateway {
           role: "user",
           content: `create an interesting text in ${language} ${
             subject ? "about " + subject : ""
-          } and returns ausing JSON format, with the structure {title:"", content:""}`,
+          } and return with this structure {title:"", content:""}`,
         },
       ],
       model: "gpt-3.5-turbo",

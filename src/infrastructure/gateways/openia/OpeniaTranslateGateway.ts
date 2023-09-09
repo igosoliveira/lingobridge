@@ -16,7 +16,7 @@ export class OpeniaTranslateGateway implements TranslatorGateway {
       messages: [
         {
           role: "user",
-          content: `translate the title ${title} and text ${content} to ${language} and returns ausing JSON format, with the structure {title:"", content:""}`,
+          content: `translate title ${title} and text ${content} to ${language} and return with this structure {title:"", content:""}`,
         },
       ],
       model: "gpt-3.5-turbo",

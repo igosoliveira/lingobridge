@@ -105,7 +105,7 @@ export class TranslateTexts {
         console.log(error);
       }
 
-      await this.pause(30);
+      await this.pause(20);
     }
   }
 }
