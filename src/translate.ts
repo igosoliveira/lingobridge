@@ -5,8 +5,13 @@ import { TranslateTexts } from "./application/usecases/main/TranslateTexts";
 
 MongoDB.connect();
 
+const languages = ["de-DE", "es-ES", "it-IT", "fr-FR"]
 async function main() {
-  await TranslateTexts.execute("en-US","es-ES");
+
+  for(let language of languages){
+    await TranslateTexts.execute("en-US",language);
+  }
+
 }
 
 main();

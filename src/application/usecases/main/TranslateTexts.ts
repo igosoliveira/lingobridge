@@ -62,7 +62,7 @@ export class TranslateTexts {
       translation_text_id,
     });
   }
-  
+
   static async createAudio(language: string, title: string, content: string) {
     const pollyGateway = new PollyService();
     const generateAudio = new GenerateAudio(pollyGateway);
@@ -80,7 +80,6 @@ export class TranslateTexts {
     });
     return audioUrl;
   }
-
 
   static async pause(segundos: number): Promise<void> {
     await new Promise<void>((resolve) => setTimeout(resolve, segundos * 1000));
@@ -100,7 +99,7 @@ export class TranslateTexts {
     );
 
     console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
-
+    if (texts.length < 1) return;
     for (const text of texts) {
       try {
         console.log(`Translating text: "${text.title}"`);
@@ -127,7 +126,7 @@ export class TranslateTexts {
           translatedText.title,
           translatedText.content,
           audioUrl,
-          text.subject_id,
+          text.subject_id
         );
 
         console.log(`Text "${translatedTextCreated.title}" saved.`);
