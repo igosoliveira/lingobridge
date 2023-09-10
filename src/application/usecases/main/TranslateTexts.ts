@@ -19,10 +19,10 @@ export class TranslateTexts {
     return saveLanguage.execute({ code: language });
   }
 
-  static async getUntranslatedTexts(language: string) {
+  static async getUntranslatedTexts(language: string, toLanguage: string) {
     const textMongoRepository = new TextMongoRepository();
     const getTexts = new FindUntranslatedText(textMongoRepository);
-    return getTexts.execute({ language });
+    return getTexts.execute({ language, toLanguage });
   }
 
   static async saveText(
@@ -44,22 +44,26 @@ export class TranslateTexts {
   }
 
   static async saveTranslate(
-    language_id: string,
     source_text_id: string,
-    translation_text_id: string
+    translation_text_id: string,
+    source_text_language_id: string,
+    translation_text_language_id: string
   ) {
     const translatorRepository = new TranslatorMongoRepository();
     const saveTranslate = new SaveTranslation(translatorRepository);
-    saveTranslate.execute({ language_id, source_text_id, translation_text_id });
+    saveTranslate.execute({
+      source_text_language_id,
+      translation_text_language_id,
+      source_text_id,
+      translation_text_id,
+    });
   }
 
   static async pause(segundos: number): Promise<void> {
     await new Promise<void>((resolve) => setTimeout(resolve, segundos * 1000));
   }
 
-  static async execute(targetLanguage: string) {
-    const sourceLanguage = "en-US";
-
+  static async execute(sourceLanguage: string, targetLanguage: string) {
     console.log(
       `Starting translation process for language: "${targetLanguage}"`
     );
@@ -67,7 +71,10 @@ export class TranslateTexts {
     await this.createLanguage(targetLanguage);
     console.log(`Language "${targetLanguage}" created.`);
 
-    const texts = await this.getUntranslatedTexts(sourceLanguage);
+    const texts = await this.getUntranslatedTexts(
+      sourceLanguage,
+      targetLanguage
+    );
 
     console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
 
@@ -88,16 +95,17 @@ export class TranslateTexts {
           targetLanguage,
           translatedText.title,
           translatedText.content,
+          "",
           text.subject_id,
-          ""
         );
 
         console.log(`Text "${translatedTextCreated.title}" saved.`);
 
         await this.saveTranslate(
-          targetLanguage,
           text.id,
-          translatedTextCreated.id
+          translatedTextCreated.id,
+          sourceLanguage,
+          targetLanguage
         );
         console.log(`Translation for "${text.title}" saved.`);
         console.log("Translation process completed.");

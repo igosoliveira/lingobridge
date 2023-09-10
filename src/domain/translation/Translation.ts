@@ -4,7 +4,8 @@ export class Translation {
   id: string;
   source_text_id: string;
   translation_text_id: string;
-  language_id: string;
+  source_text_language_id: string;
+  translation_text_language_id: string;
   created_at: Date;
   updated_at: Date | null = null;
 
@@ -13,14 +14,16 @@ export class Translation {
     id: string,
     source_text_id: string,
     translation_text_id: string,
-    language_id: string,
+    source_text_language_id: string,
+    translation_text_language_id: string,
     created_at: Date,
     updated_at: Date | null = null
   ) {
     this.id = id;
     this.source_text_id = source_text_id;
     this.translation_text_id = translation_text_id;
-    this.language_id = language_id;
+    this.source_text_language_id =  source_text_language_id;
+    this.translation_text_language_id = translation_text_language_id;
     this.created_at = created_at;
     this.updated_at = updated_at;
   }
@@ -28,8 +31,8 @@ export class Translation {
   static create(
     source_text_id: string,
     translation_text_id: string,
-    language_id: string
-  ) {
+    source_text_language_id: string,
+    translation_text_language_id: string  ) {
     const id = UUID.create();
     const currentTime = new Date();
 
@@ -37,7 +40,8 @@ export class Translation {
       id,
       source_text_id,
       translation_text_id,
-      language_id,
+      source_text_language_id,
+      translation_text_language_id,
       currentTime,
       currentTime
     );

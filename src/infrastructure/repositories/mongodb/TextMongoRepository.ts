@@ -14,10 +14,17 @@ export class TextMongoRepository implements TextRepository {
     return TextModel.find({ language_id: language });
   }
 
-  async findUntranslated(language: string = "en-US"): Promise<Text[]> {
+  async findUntranslated(
+    language: string = "en-US",
+    toLanguage: string
+  ): Promise<Text[]> {
     return TextModel.find({
       language_id: language,
-      id: { $nin: await TranslationModel.distinct("source_text_id") },
+      id: {
+        $nin: await TranslationModel.distinct("source_text_id", {
+          translation_text_language_id: toLanguage,
+        }),
+      },
     });
   }
 }

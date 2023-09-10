@@ -8,7 +8,8 @@ export class SaveTranslation {
     const translation = Translation.create(
       input.source_text_id,
       input.translation_text_id,
-      input.language_id
+      input.source_text_language_id,
+      input.translation_text_language_id
     );
 
     await this.translatorRepository.save(translation);
@@ -20,11 +21,13 @@ export class SaveTranslation {
 type Input = {
   source_text_id: string;
   translation_text_id: string;
-  language_id: string;
+  source_text_language_id: string;
+  translation_text_language_id: string;
 };
 
 type Output = {
   source_text_id: string;
   translation_text_id: string;
-  language_id: string;
+  source_text_language_id: string;
+  translation_text_language_id: string;
 };

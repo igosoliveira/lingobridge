@@ -112,6 +112,14 @@ export class GenerateDefaultText {
         throw Error("ERROR similarity text");
       }
 
+      console.log("Generating audio ");
+      const audioUrl = await this.createAudio(
+        language,
+        textGeneration.title,
+        textGeneration.content
+      );
+      console.log("Audio saved:", audioUrl);
+
       console.log("Creating language");
       const languageCreated = await this.createLanguage(language);
       console.log("Language created:", languageCreated);
@@ -120,13 +128,6 @@ export class GenerateDefaultText {
       const subjectCreated = await this.createSubject(subject);
       console.log("Subject created:", subjectCreated);
 
-      console.log("Generating audio ");
-      const audioUrl = await this.createAudio(
-        language,
-        textGeneration.title,
-        textGeneration.content
-      );
-      console.log("Audio saved:", audioUrl);
 
       console.log("Saving text ");
       const textCreated = await this.saveText(
