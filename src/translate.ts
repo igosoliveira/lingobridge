@@ -6,7 +6,7 @@ import { TranslateTexts } from "./application/usecases/main/TranslateTexts";
 MongoDB.connect();
 
 async function main() {
-  await TranslateTexts.execute("en-US","pt-BR");
+  await TranslateTexts.execute("en-US","es-ES");
 }
 
 main();

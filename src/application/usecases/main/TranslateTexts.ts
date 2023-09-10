@@ -6,6 +6,10 @@ import { OpeniaTranslateGateway } from "../../../infrastructure/gateways/openia/
 import { SaveTranslation } from "../translations/SaveTranslation";
 import { TranslatorMongoRepository } from "../../../infrastructure/repositories/mongodb/TranslatorMongoRepository";
 import { FindUntranslatedText } from "../text/FindUntranslatedText";
+import PollyService from "../../../infrastructure/gateways/aws/PollyService";
+import { S3Repository } from "../../../infrastructure/repositories/aws/S3Repository";
+import { SaveAudio } from "../audio/SaveAudio";
+import { GenerateAudio } from "../audio/CenerateAudio";
 
 export class TranslateTexts {
   static async translate(language: string, title: string, content: string) {
@@ -58,6 +62,25 @@ export class TranslateTexts {
       translation_text_id,
     });
   }
+  
+  static async createAudio(language: string, title: string, content: string) {
+    const pollyGateway = new PollyService();
+    const generateAudio = new GenerateAudio(pollyGateway);
+    const audio = await generateAudio.execute({
+      language: language,
+      text: `${title}${content}`,
+    });
+
+    const s3Repository = new S3Repository();
+    const saveAudio = new SaveAudio(s3Repository);
+    const audioUrl = await saveAudio.execute({
+      audioBuffer: audio,
+      name: title,
+      language: language,
+    });
+    return audioUrl;
+  }
+
 
   static async pause(segundos: number): Promise<void> {
     await new Promise<void>((resolve) => setTimeout(resolve, segundos * 1000));
@@ -91,11 +114,19 @@ export class TranslateTexts {
         console.log(`Translation complete for "${text.title}"`);
         console.log(translatedText);
 
+        console.log("Generating audio ");
+        const audioUrl = await this.createAudio(
+          targetLanguage,
+          translatedText.title,
+          translatedText.content
+        );
+        console.log("Audio saved:", audioUrl);
+
         const translatedTextCreated = await this.saveText(
           targetLanguage,
           translatedText.title,
           translatedText.content,
-          "",
+          audioUrl,
           text.subject_id,
         );
 

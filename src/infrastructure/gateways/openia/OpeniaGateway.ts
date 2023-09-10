@@ -15,7 +15,7 @@ export class OpeniaGateway implements TextGeneratorGateway {
       messages: [
         {
           role: "user",
-          content: `create an interesting text in ${language} ${
+          content: `create an interesting short text in ${language} ${
             subject ? "about " + subject : ""
           } and return with this structure {title:"", content:""}`,
         },
