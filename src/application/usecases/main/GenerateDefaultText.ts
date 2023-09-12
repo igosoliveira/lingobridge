@@ -55,20 +55,20 @@ export class GenerateDefaultText {
     return similarity;
   }
 
-  static async createAudio(language: string, title: string, content: string) {
+  static async createAudio(fileName: string, language: string, string: string) {
+
     const pollyGateway = new PollyService();
     const generateAudio = new GenerateAudio(pollyGateway);
     const audio = await generateAudio.execute({
       language: language,
-      text: `${title}${content}`,
+      text: string,
     });
 
     const s3Repository = new S3Repository();
     const saveAudio = new SaveAudio(s3Repository);
     const audioUrl = await saveAudio.execute({
       audioBuffer: audio,
-      name: title,
-      language: language,
+      name: `${language}/${fileName}`,
     });
     return audioUrl;
   }
@@ -78,7 +78,7 @@ export class GenerateDefaultText {
     title: string,
     content: string,
     audioUrl: string,
-    subjectId:string
+    subjectId: string
   ) {
     const textMongoRepository = new TextMongoRepository();
     const saveText = new SaveText(textMongoRepository);
@@ -87,7 +87,7 @@ export class GenerateDefaultText {
       title: title,
       content: content,
       audio_url: audioUrl,
-      subject_id: subjectId
+      subject_id: subjectId,
     });
     return textCreated;
   }
@@ -114,9 +114,9 @@ export class GenerateDefaultText {
 
       console.log("Generating audio ");
       const audioUrl = await this.createAudio(
+        new Date().getTime().toString(),
         language,
-        textGeneration.title,
-        textGeneration.content
+        `${textGeneration.title}${textGeneration.content}`
       );
       console.log("Audio saved:", audioUrl);
 
@@ -127,7 +127,6 @@ export class GenerateDefaultText {
       console.log("Creating subject");
       const subjectCreated = await this.createSubject(subject);
       console.log("Subject created:", subjectCreated);
-
 
       console.log("Saving text ");
       const textCreated = await this.saveText(

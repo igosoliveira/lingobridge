@@ -22,7 +22,6 @@ export class PollyService implements AudioGeneratorGateway {
   async generatorAudio(
     language: string,
     text: string,
-    voiceId?: string
   ): Promise<any> {
     const voice = await this.describeVoices(language);
 

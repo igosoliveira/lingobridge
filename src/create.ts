@@ -7,7 +7,7 @@ MongoDB.connect();
 
 const config = {
   executions: 0,
-  maxExecutions: 100,
+  maxExecutions: 200,
 };
 const progress = {
   errors: 0,

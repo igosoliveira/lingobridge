@@ -7,7 +7,6 @@ export class SaveAudio {
     const audioUrl = await this.audioRepository.save(
       input.audioBuffer,
       input.name,
-      input.language
     );
     return audioUrl;
   }
@@ -16,7 +15,6 @@ export class SaveAudio {
 type Input = {
   audioBuffer: any ;
   name: string;
-  language: string;
 };
 
 type Output = string;

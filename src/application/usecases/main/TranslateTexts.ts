@@ -63,7 +63,7 @@ export class TranslateTexts {
     });
   }
 
-  static async createAudio(language: string, title: string, content: string) {
+  static async createAudio(fileName: string, language: string, title: string, content: string) {
     const pollyGateway = new PollyService();
     const generateAudio = new GenerateAudio(pollyGateway);
     const audio = await generateAudio.execute({
@@ -75,8 +75,7 @@ export class TranslateTexts {
     const saveAudio = new SaveAudio(s3Repository);
     const audioUrl = await saveAudio.execute({
       audioBuffer: audio,
-      name: title,
-      language: language,
+      name: `${language}/${fileName}`,
     });
     return audioUrl;
   }
@@ -87,11 +86,11 @@ export class TranslateTexts {
 
   static async execute(sourceLanguage: string, targetLanguage: string) {
     console.log(
-      `Starting translation process for language: "${targetLanguage}"`
+      `Starting the translation process for language: "${targetLanguage}"`
     );
 
     await this.createLanguage(targetLanguage);
-    console.log(`Language "${targetLanguage}" created.`);
+    console.log(`Language "${targetLanguage}" created successfully.`);
 
     const texts = await this.getUntranslatedTexts(
       sourceLanguage,
@@ -99,7 +98,11 @@ export class TranslateTexts {
     );
 
     console.log(`Found ${texts.length} text(s) in "${sourceLanguage}".`);
-    if (texts.length < 1) return;
+    if (texts.length < 1) {
+      console.log("No text to translate. Exiting the process.");
+      return;
+    }
+
     for (const text of texts) {
       try {
         console.log(`Translating text: "${text.title}"`);
@@ -110,11 +113,12 @@ export class TranslateTexts {
           text.content
         );
 
-        console.log(`Translation complete for "${text.title}"`);
-        console.log(translatedText);
+        console.log(`Translation completed for "${text.title}"`);
+        console.log("Translated text:", translatedText);
 
-        console.log("Generating audio ");
+        console.log("Generating audio...");
         const audioUrl = await this.createAudio(
+          new Date().getTime().toString(),
           targetLanguage,
           translatedText.title,
           translatedText.content
@@ -129,7 +133,9 @@ export class TranslateTexts {
           text.subject_id
         );
 
-        console.log(`Text "${translatedTextCreated.title}" saved.`);
+        console.log(
+          `Text "${translatedTextCreated.title}" saved successfully.`
+        );
 
         await this.saveTranslate(
           text.id,
@@ -137,13 +143,18 @@ export class TranslateTexts {
           sourceLanguage,
           targetLanguage
         );
-        console.log(`Translation for "${text.title}" saved.`);
-        console.log("Translation process completed.");
+        console.log(`Translation for "${text.title}" saved successfully.`);
       } catch (error) {
-        console.log(error);
+        console.error("Error during translation:", error);
+
+        console.log(`Waiting for 180 seconds before retrying...`);
+        //  await this.pause(180);
       }
 
+      console.log(`Waiting for 20 seconds before processing the next text...`);
       await this.pause(20);
     }
+
+    console.log("Translation process completed.");
   }
 }
