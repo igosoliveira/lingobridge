@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { TextController } from "../../../../presentation/controllers/TextControllers";
+import { TextController } from "../../../../presentation/controllers/TextController";
 
 const textRoutes = express.Router();
 
