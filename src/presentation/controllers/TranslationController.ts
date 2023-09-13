@@ -6,8 +6,16 @@ export class TranslationController {
     request: Request,
     reponse: Response
   ): Promise<Response> {
-    const language = request.params.language;
-    const texts = await getTranslationsUseCase.execute({ language});
+    const fromLanguage = request.query.from as string;
+    const toLanguage = request.query.to as string;
+
+    if (!fromLanguage && !toLanguage) {
+      return reponse.send({ error: "error" });
+    }
+    const texts = await getTranslationsUseCase.execute({
+      fromLanguage,
+      toLanguage,
+    });
     return reponse.send(texts).status(200);
   }
 }

@@ -4,7 +4,7 @@ import { TranslationController } from "../../../../presentation/controllers/Tran
 const translationRoutes = express.Router();
 
 translationRoutes.get(
-  "/:language",
+  "/",
   async (req: Request, res: Response) => await TranslationController.getTexts(req, res)
 );
 

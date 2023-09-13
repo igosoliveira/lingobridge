@@ -9,16 +9,15 @@ export class GetTranslation {
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    const translations: Translation[] = await this.translatorRepository.findAll(
-      input.language
+    const translations: Translation[] = await this.translatorRepository.getAllByLanguage(
+      input.fromLanguage,
+      input.toLanguage
     );
     const response = [];
 
     for (const translation of translations) {
-      const {
-        source_text_id: sourceId,
-        translation_text_id: translationId
-      } = translation;
+      const { source_text_id: sourceId, translation_text_id: translationId } =
+        translation;
 
       const sourceText = await this.textRepository.findById(sourceId);
       const translateText = await this.textRepository.findById(translationId);
@@ -43,7 +42,8 @@ export class GetTranslation {
 }
 
 type Input = {
-  language: string;
+  toLanguage: string;
+  fromLanguage: string;
 };
 
 type Output = Array<any>;
