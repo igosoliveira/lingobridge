@@ -4,8 +4,8 @@ import TextModel from "./model/TextModel";
 import TranslationModel from "./model/TranslationModel";
 
 export class TextMongoRepository implements TextRepository {
-  findById(id: string): Promise<Text | null> {
-    return TextModel.findOne({ id: id });
+  findById(id: string, language: string): Promise<Text | null> {
+    return TextModel.findOne({ id: id, language_id: language });
   }
   findOne(find: Object): Promise<Text | null> {
     return TextModel.findOne(find);

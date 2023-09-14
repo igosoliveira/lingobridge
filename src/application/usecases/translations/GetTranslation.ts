@@ -19,8 +19,8 @@ export class GetTranslation {
       const { source_text_id: sourceId, translation_text_id: translationId } =
         translation;
 
-      const sourceText = await this.textRepository.findById(sourceId);
-      const translateText = await this.textRepository.findById(translationId);
+      const sourceText = await this.textRepository.findById(sourceId, input.fromLanguage);
+      const translatedText = await this.textRepository.findById(translationId,  input.toLanguage);
 
       response.push({
         id: translation.id,
@@ -30,10 +30,10 @@ export class GetTranslation {
           audio: sourceText?.audio_url,
           language: sourceText?.language_id,
         },
-        translate: {
-          title: translateText?.title,
-          content: translateText?.content,
-          language: translateText?.language_id,
+        translation: {
+          title: translatedText?.title,
+          content: translatedText?.content,
+          language: translatedText?.language_id,
         },
       });
     }
