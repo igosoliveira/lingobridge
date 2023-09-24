@@ -127,7 +127,7 @@ export class GenerateDefaultText {
       const audioUrl = await this.createAudio(
         new Date().getTime().toString(),
         language,
-        `${textGeneration.title}${textGeneration.content}`
+        `${textGeneration.title}.${textGeneration.content}`
       );
       const audioGenerationEndTime = new Date();
       const audioGenerationTime = audioGenerationEndTime.getTime() - audioGenerationStartTime.getTime();
