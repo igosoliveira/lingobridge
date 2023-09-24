@@ -63,7 +63,9 @@ export class GenerateDefaultText {
       language: language,
       text: string,
     });
-
+    if(!audio){
+      return null
+    }
     const s3Repository = new S3Repository();
     const saveAudio = new SaveAudio(s3Repository);
     const audioUrl = await saveAudio.execute({
@@ -77,7 +79,7 @@ export class GenerateDefaultText {
     language: string,
     title: string,
     content: string,
-    audioUrl: string,
+    audioUrl: string | null,
     subjectId: string
   ) {
     const textMongoRepository = new TextMongoRepository();
@@ -94,41 +96,59 @@ export class GenerateDefaultText {
 
   static async execute(language: string, subject: string = "") {
     try {
-      console.log("starting text creation...");
-
-      console.log("Generating text");
+      const startTime = new Date();
+  
+      console.log(`[${new Date().toISOString()}] Starting text creation...`);
+  
+      const textGenerationStartTime = new Date();
+      console.log(`[${textGenerationStartTime.toISOString()}] Generating text`);
       const textGeneration = await this.createText(language, subject);
-      console.log("Text generated:", textGeneration);
-
-      console.log("Generating similarity");
+      const textGenerationEndTime = new Date();
+      const textGenerationTime = textGenerationEndTime.getTime() - textGenerationStartTime.getTime();
+      console.log(`[${textGenerationEndTime.toISOString()}] Text generated in ${textGenerationTime} ms:`, textGeneration);
+  
+      const similarityStartTime = new Date();
+      console.log(`[${similarityStartTime.toISOString()}] Generating similarity`);
       const similarity = await this.checkSimilarity(
         language,
         textGeneration.title,
         textGeneration.content
       );
-      console.log("similarity generated:", similarity);
-
+      const similarityEndTime = new Date();
+      const similarityTime = similarityEndTime.getTime() - similarityStartTime.getTime();
+      console.log(`[${similarityEndTime.toISOString()}] Similarity generated in ${similarityTime} ms:`, similarity);
+  
       if (similarity) {
         throw Error("ERROR similarity text");
       }
-
-      console.log("Generating audio ");
+  
+      const audioGenerationStartTime = new Date();
+      console.log(`[${audioGenerationStartTime.toISOString()}] Generating audio`);
       const audioUrl = await this.createAudio(
         new Date().getTime().toString(),
         language,
         `${textGeneration.title}${textGeneration.content}`
       );
-      console.log("Audio saved:", audioUrl);
-
-      console.log("Creating language");
+      const audioGenerationEndTime = new Date();
+      const audioGenerationTime = audioGenerationEndTime.getTime() - audioGenerationStartTime.getTime();
+      console.log(`[${audioGenerationEndTime.toISOString()}] Audio saved in ${audioGenerationTime} ms:`, audioUrl);
+  
+      const languageCreationStartTime = new Date();
+      console.log(`[${languageCreationStartTime.toISOString()}] Creating language`);
       const languageCreated = await this.createLanguage(language);
-      console.log("Language created:", languageCreated);
-
-      console.log("Creating subject");
+      const languageCreationEndTime = new Date();
+      const languageCreationTime = languageCreationEndTime.getTime() - languageCreationStartTime.getTime();
+      console.log(`[${languageCreationEndTime.toISOString()}] Language created in ${languageCreationTime} ms:`, languageCreated);
+  
+      const subjectCreationStartTime = new Date();
+      console.log(`[${subjectCreationStartTime.toISOString()}] Creating subject`);
       const subjectCreated = await this.createSubject(subject);
-      console.log("Subject created:", subjectCreated);
-
-      console.log("Saving text ");
+      const subjectCreationEndTime = new Date();
+      const subjectCreationTime = subjectCreationEndTime.getTime() - subjectCreationStartTime.getTime();
+      console.log(`[${subjectCreationEndTime.toISOString()}] Subject created in ${subjectCreationTime} ms:`, subjectCreated);
+  
+      const textSavingStartTime = new Date();
+      console.log(`[${textSavingStartTime.toISOString()}] Saving text`);
       const textCreated = await this.saveText(
         language,
         textGeneration.title,
@@ -136,11 +156,18 @@ export class GenerateDefaultText {
         audioUrl,
         subjectCreated.id
       );
-      console.log("Text saved:", textCreated);
-
+      const textSavingEndTime = new Date();
+      const textSavingTime = textSavingEndTime.getTime() - textSavingStartTime.getTime();
+      console.log(`[${textSavingEndTime.toISOString()}] Text saved in ${textSavingTime} ms:`, textCreated);
+  
+      const endTime = new Date();
+      const totalTime = endTime.getTime() - startTime.getTime();
+      console.log(`[${endTime.toISOString()}] All tasks completed in ${totalTime} ms`);
+  
       return textCreated;
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error(`[${new Date().toISOString()}] An error occurred:`, error);
     }
   }
+  
 }

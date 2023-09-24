@@ -16,7 +16,7 @@ export class GetTranslation {
     const response = [];
 
     for (const translation of translations) {
-      const { source_text_id: sourceId, translation_text_id: translationId } =
+      const { source_id: sourceId, translation_id: translationId } =
         translation;
 
       const sourceText = await this.textRepository.findById(sourceId, input.fromLanguage);

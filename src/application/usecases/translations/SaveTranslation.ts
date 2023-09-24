@@ -6,10 +6,11 @@ export class SaveTranslation {
 
   async execute(input: Input): Promise<Output> {
     const translation = Translation.create(
-      input.source_text_id,
-      input.translation_text_id,
-      input.source_text_language_id,
-      input.translation_text_language_id
+      input.source_id,
+      input.translation_id,
+      input.source_language_id,
+      input.translation_language_id,
+      input.phrases_id
     );
 
     await this.translatorRepository.save(translation);
@@ -19,15 +20,17 @@ export class SaveTranslation {
 }
 
 type Input = {
-  source_text_id: string;
-  translation_text_id: string;
-  source_text_language_id: string;
-  translation_text_language_id: string;
+  source_id: string;
+  translation_id: string;
+  source_language_id: string;
+  translation_language_id: string;
+  phrases_id: string;
 };
 
 type Output = {
-  source_text_id: string;
-  translation_text_id: string;
-  source_text_language_id: string;
-  translation_text_language_id: string;
+  source_id: string;
+  translation_id: string;
+  source_language_id: string;
+  translation_language_id: string;
+  phrases_id: string;
 };

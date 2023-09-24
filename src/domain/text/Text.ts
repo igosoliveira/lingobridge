@@ -4,10 +4,9 @@ export class Text {
   id: string;
   title: string;
   content: string;
-  audio_url: string;
+  audio_url: string | null;
   language_id: string;
   subject_id: string;
-
   created_at: Date;
   updated_at: Date | null = null;
 
@@ -15,7 +14,7 @@ export class Text {
     id: string,
     title: string,
     content: string,
-    audio_url: string,
+    audio_url: string | null,
     language_id: string,
     subject_id: string,
     created_at: Date,
@@ -34,7 +33,7 @@ export class Text {
   static create(
     title: string,
     content: string,
-    audio_url: string,
+    audio_url: string | null,
     language_id: string,
     subject_id: string
   ) {

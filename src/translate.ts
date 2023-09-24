@@ -5,7 +5,8 @@ import { TranslateTexts } from "./application/usecases/main/TranslateTexts";
 
 MongoDB.connect();
 
-const languages = ["cmn-CN","de-DE", "es-ES", "it-IT", "fr-FR"]
+const languages = ["ar-AE","pt-BR","ru-RU","cmn-CN","de-DE", "es-ES", "it-IT", "fr-FR", "ja-JP","ko-KR",]
+
 async function main() {
 
   for(let language of languages){
@@ -15,3 +16,15 @@ async function main() {
 }
 
 main();
+
+
+//pegar todos os textos de uma linguagem
+//interar sobre cada um
+  //pegar as frases
+  //armazenar no mongo 
+  //  collection: phrases{ id, idTranslation, phrases:[{}]}
+  //  adicionar o id da frase na traducao
+  // 
+
+
+

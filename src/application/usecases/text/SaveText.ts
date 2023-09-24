@@ -23,7 +23,7 @@ type Input = {
   language_id: string;
   title: string;
   content: string;
-  audio_url: string;
+  audio_url: string | null;
   subject_id: string
 };
 
@@ -32,5 +32,5 @@ type Output = {
   language_id: string;
   title: string;
   content: string;
-  audio_url: string;
+  audio_url: string | null;
 };

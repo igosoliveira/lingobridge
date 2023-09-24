@@ -5,7 +5,7 @@ export class SaveLanguage {
   constructor(readonly languageRepository: LanguageRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const language = Language.create(input.code);
+    const language = Language.createFromCode(input.code);
     const languageFound = await this.languageRepository.findById(language.id);
     if (!languageFound) {
       await this.languageRepository.save(language);

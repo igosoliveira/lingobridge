@@ -26,7 +26,8 @@ export class OpeniaTranslateGateway implements TranslatorGateway {
       .decode(completion.choices[0].message.content as string)
       .replace(/\\./g, "")
       .replace(/\n/g, "");
-
-    return JSON.parse(textEnglish);
+    
+    const text = JSON.parse(textEnglish);
+    return text;
   }
 }

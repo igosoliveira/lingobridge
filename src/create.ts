@@ -216,6 +216,7 @@ const subjects: string[] = [
 ];
 
 console.log(subjects.length);
+subjects.reverse()
 
 let indexSubjects = 0;
 const intervalo = setInterval(async () => {
@@ -241,4 +242,4 @@ const intervalo = setInterval(async () => {
     clearInterval(intervalo);
     return;
   }
-}, 50000);
+}, 60000);
