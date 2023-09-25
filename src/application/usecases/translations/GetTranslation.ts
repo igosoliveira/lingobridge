@@ -1,11 +1,14 @@
 import { Translation } from "../../../domain/translation/Translation";
+import { PhrasesRepository } from "../../repositories/PhrasesRepository";
 import { TextRepository } from "../../repositories/TextRepository";
 import { TranslatorRepository } from "../../repositories/TranslatorRepository";
 
 export class GetTranslation {
   constructor(
     readonly translatorRepository: TranslatorRepository,
-    readonly textRepository: TextRepository
+    readonly textRepository: TextRepository,
+    readonly phrasesRepository: PhrasesRepository
+
   ) {}
 
   async execute(input: Input): Promise<Output> {
@@ -16,14 +19,16 @@ export class GetTranslation {
     const response = [];
 
     for (const translation of translations) {
-      const { source_id: sourceId, translation_id: translationId } =
+      const { source_id: sourceId, translation_id: translationId, phrases_id: phrasesId } =
         translation;
 
       const sourceText = await this.textRepository.findById(sourceId, input.fromLanguage);
       const translatedText = await this.textRepository.findById(translationId,  input.toLanguage);
+      const phrases = await this.phrasesRepository.findById(phrasesId)
 
       response.push({
         id: translation.id,
+        phrases: phrases?.phrases,
         text: {
           title: sourceText?.title,
           content: sourceText?.content,

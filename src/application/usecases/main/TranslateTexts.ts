@@ -24,10 +24,10 @@ export class TranslateTexts {
     return openiaPhrasesGateway.generate(text, toLanguage, fromLanguage);
   }
 
-  static async savePhrases(phrases: Array<Object>[]) {
+  static async savePhrases(phrases: Array<Object>[], source_language_id:string, translation_language_id:string) {
     const phrasesMongoRepository = new PhrasesMongoRepository();
     const savePhrases = new SavePhrases(phrasesMongoRepository);
-    return savePhrases.execute({ phrases });
+    return savePhrases.execute({ phrases, source_language_id, translation_language_id });
   }
 
   static async translate(language: string, title: string, content: string) {
@@ -204,7 +204,7 @@ export class TranslateTexts {
           console.log(`[${new Date().toISOString()}] Task ${i + 1}/${texts.length}: Saving phrases...`);
           const phrasesSaveStartTime = Date.now();
   
-          const phrases = await this.savePhrases(sentences);
+          const phrases = await this.savePhrases(sentences, sourceLanguage,targetLanguage);
   
           const phrasesSaveTime = (Date.now() - phrasesSaveStartTime) / 1000;
   

@@ -5,7 +5,7 @@ export class SavePhrases {
   constructor(readonly PhrasesRepository: PhrasesRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const phrases = Phrases.create(input.phrases);
+    const phrases = Phrases.create(input.phrases, input.source_language_id, input.translation_language_id);
 
     await this.PhrasesRepository.save(phrases);
 
@@ -15,6 +15,8 @@ export class SavePhrases {
 
 type Input = {
   phrases: Array<Object>[];
+  source_language_id: string;
+  translation_language_id: string;
 };
 
 type Output = {
