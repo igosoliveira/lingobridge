@@ -51,7 +51,7 @@ export class Translate {
             language: targetLanguage,
             text: `${translatedText.title}. ${translatedText.content}`,
             name: new Date().getTime().toString(),
-            folder: "texts",
+            folder: `texts/${targetLanguage}`,
           });
           console.log(audioUrl);
           console.log("Audio created");
@@ -67,7 +67,7 @@ export class Translate {
               language: targetLanguage,
               text: sentence.sentence,
               name: new Date().getTime().toString(),
-              folder: "sentences",
+              folder: `sentences/${targetLanguage}`,
             });
             newSentences.push({ ...sentence, audio: audioUrl });
           }

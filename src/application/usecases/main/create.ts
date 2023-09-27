@@ -9,7 +9,7 @@ import {
 } from "../../../di/text";
 
 export class Create {
-  static async execute(language: string, subject: string = "") {
+  static async execute(language: string = "en-US", subject: string = "") {
     try {
       console.log("generating text");
       const textGeneration = await generateTextUseCase.execute({
@@ -36,7 +36,7 @@ export class Create {
         language: language,
         text: `${textGeneration.title}. ${textGeneration.content}`,
         name: new Date().getTime().toString(),
-        folder: "texts",
+        folder: `texts,${language}`,
       });
       console.log(audioUrl);
       console.log("Audio created");
@@ -65,7 +65,7 @@ export class Create {
           language: language,
           text: sentence.sentence,
           name: new Date().getTime().toString(),
-          folder: "sentences",
+          folder: `sentences/${language}`,
         });
 
         newSentences.push({ ...sentence, audio: audioUrl });
