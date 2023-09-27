@@ -1,38 +1,21 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 interface IPhrases extends Document {
-  id: string;
-  phrases: Array<object>;
-  source_language_id:  string;
-  translation_language_id:  string;
+  id: string
+  sentences: Array<object>;
+  language_id: string;
   created_at: Date;
-  updated_at: Date | null;
+  updated_at: Date;
 }
 
-const phrasesSchema = new Schema<IPhrases>(
-  {
-    id: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    phrases: {
-      type: [Schema.Types.Mixed], 
-      required: true,
-    },
-    source_language_id: { type: String, required: true },
-    translation_language_id: { type: String, required: true },
-    created_at: {
-      type: Date,
-      default: Date.now,
-    },
-    updated_at: {
-      type: Date,
-      default: null, 
-    },
-  },
-);
+const PhrasesSchema: Schema = new Schema({
+  id: { type: String, required: true, unique: true },
+  sentences: [{ type: Schema.Types.Mixed }], 
+  language_id: { type: String, required: true },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
+});
 
-const PhrasesModel = mongoose.model<IPhrases>('Phrases', phrasesSchema);
+const PhrasesModel = mongoose.model<IPhrases>('Phrases', PhrasesSchema);
 
 export default PhrasesModel;

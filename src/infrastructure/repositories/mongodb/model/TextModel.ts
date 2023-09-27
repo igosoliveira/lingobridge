@@ -7,6 +7,7 @@ interface TextDocument extends Document {
   audio_url: string;
   language_id: string;
   subject_id: string;
+  phrases_id:string;
   created_at: Date;
   updated_at: Date;
 }
@@ -19,6 +20,7 @@ const textSchema = new Schema<TextDocument>(
     audio_url: { type: String, required: false },
     language_id: { type: String, required: true },
     subject_id: { type: String, required: false },
+    phrases_id: { type: String, required: false },
     created_at: { type: Date, required: true },
     updated_at: { type: Date, required: false },
   },

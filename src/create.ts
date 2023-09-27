@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env" });
-import { GenerateDefaultText } from "./application/usecases/main/GenerateDefaultText";
 import MongoDB from "./infrastructure/repositories/mongodb/mongodb";
+import { Create } from "./application/usecases/main/create";
 
 MongoDB.connect();
 
@@ -216,11 +216,10 @@ const subjects: string[] = [
 ];
 
 console.log(subjects.length);
-subjects.reverse()
 
-let indexSubjects = 0;
+let indexSubjects = 80;
 const intervalo = setInterval(async () => {
-  const textCreated = await GenerateDefaultText.execute(
+  const textCreated = await Create.execute(
     "en-US",
     subjects[indexSubjects++]
   );
@@ -228,10 +227,10 @@ const intervalo = setInterval(async () => {
   if (indexSubjects > subjects.length - 1) {
     indexSubjects = 0;
   }
-  if (textCreated) {
-    progress.success++;
-  } else {
+  if (!!textCreated.error) {
     progress.errors++;
+  } else {
+    progress.success++;
   }
   config.executions++;
   console.log(`execultando: ${config.executions}`);

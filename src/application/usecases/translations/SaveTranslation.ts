@@ -10,7 +10,8 @@ export class SaveTranslation {
       input.translation_id,
       input.source_language_id,
       input.translation_language_id,
-      input.phrases_id
+      input.phrases_id,
+      input.translation_phrases_id
     );
 
     await this.translatorRepository.save(translation);
@@ -25,6 +26,7 @@ type Input = {
   source_language_id: string;
   translation_language_id: string;
   phrases_id: string;
+  translation_phrases_id: string
 };
 
 type Output = {
@@ -33,4 +35,6 @@ type Output = {
   source_language_id: string;
   translation_language_id: string;
   phrases_id: string;
+  translation_phrases_id: string
+
 };

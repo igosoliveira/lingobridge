@@ -1,5 +1,5 @@
 
 export interface AudioRepository {
-  save(audio: any, name: string): Promise<string>;
-  getUrl(name:string):string
+  save(audio: any, folder: string, name: string): Promise<string>;
+  getUrl(name:string, folder:string):string
 }

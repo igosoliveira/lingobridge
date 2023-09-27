@@ -8,37 +8,59 @@ export class GetTranslation {
     readonly translatorRepository: TranslatorRepository,
     readonly textRepository: TextRepository,
     readonly phrasesRepository: PhrasesRepository
-
   ) {}
 
   async execute(input: Input): Promise<Output> {
-    const translations: Translation[] = await this.translatorRepository.getAllByLanguage(
-      input.fromLanguage,
-      input.toLanguage
-    );
+    const translations: Translation[] =
+      await this.translatorRepository.getAllByLanguage(
+        input.fromLanguage,
+        input.toLanguage
+      );
     const response = [];
 
     for (const translation of translations) {
-      const { source_id: sourceId, translation_id: translationId, phrases_id: phrasesId } =
-        translation;
+      const {
+        source_id: sourceId,
+        translation_id: translationId,
+        phrases_id: phrasesId,
+        translation_phrases_id: translationPhrasesId,
+      } = translation;
 
-      const sourceText = await this.textRepository.findById(sourceId, input.fromLanguage);
-      const translatedText = await this.textRepository.findById(translationId,  input.toLanguage);
-      const phrases = await this.phrasesRepository.findById(phrasesId)
+      const sourceText = await this.textRepository.findById(
+        sourceId,
+        input.fromLanguage
+      );
+      const targetText = await this.textRepository.findById(
+        translationId,
+        input.toLanguage
+      );
+      const sourcePhrases = await this.phrasesRepository.findById(phrasesId);
+      const targetPhrases = await this.phrasesRepository.findById(
+        translationPhrasesId
+      );
+
+      const sentences: Array<object> = [];
+      sourcePhrases?.sentences.forEach((phrase, index) => {
+        sentences.push({
+          [input.fromLanguage]: phrase,
+          [input.toLanguage]: targetPhrases?.sentences[index],
+        });
+      });
 
       response.push({
-        id: translation.id,
-        phrases: phrases?.phrases,
+        language: {
+          sourceLanguage: sourceText?.language_id,
+          targetLanguage: targetText?.language_id,
+        },
+        phrases: sentences,
         text: {
           title: sourceText?.title,
           content: sourceText?.content,
           audio: sourceText?.audio_url,
-          language: sourceText?.language_id,
         },
         translation: {
-          title: translatedText?.title,
-          content: translatedText?.content,
-          language: translatedText?.language_id,
+          title: targetText?.title,
+          content: targetText?.content,
         },
       });
     }

@@ -2,26 +2,26 @@ import { PhrasesRepository } from "../../repositories/PhrasesRepository";
 import { Phrases } from "../../../domain/phrases/Phrases";
 
 export class SavePhrases {
-  constructor(readonly PhrasesRepository: PhrasesRepository) {}
+  constructor(readonly phrasesRepository: PhrasesRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const phrases = Phrases.create(input.phrases, input.source_language_id, input.translation_language_id);
+    const phrases = Phrases.create(input.language_id, input.phrases);
 
-    await this.PhrasesRepository.save(phrases);
+    await this.phrasesRepository.save(phrases);
 
-    return phrases;
+    return phrases
   }
 }
 
 type Input = {
-  phrases: Array<Object>[];
-  source_language_id: string;
-  translation_language_id: string;
+  language_id: string;
+  phrases: Array<object>;
 };
 
 type Output = {
   id: string;
-  phrases: Array<Object>[];
+  sentences: Array<object>;
+  language_id: string;
   created_at: Date;
   updated_at: Date | null;
-};
+}; 

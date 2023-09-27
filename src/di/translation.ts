@@ -1,4 +1,5 @@
 import { GetTranslation } from "../application/usecases/translations/GetTranslation";
+import { SaveTranslation } from "../application/usecases/translations/SaveTranslation";
 import { PhrasesMongoRepository } from "../infrastructure/repositories/mongodb/PhrasesMongoRepository";
 import { TextMongoRepository } from "../infrastructure/repositories/mongodb/TextMongoRepository";
 import { TranslatorMongoRepository } from "../infrastructure/repositories/mongodb/TranslatorMongoRepository";
@@ -9,4 +10,7 @@ const phrasesMongoRepository = new PhrasesMongoRepository();
 
 const getTranslationsUseCase = new GetTranslation(translationRepository,textRepository, phrasesMongoRepository);
 
-export  { getTranslationsUseCase };
+const translatorRepository = new TranslatorMongoRepository();
+const saveTranslateUseCase = new SaveTranslation(translatorRepository);
+
+export  { getTranslationsUseCase ,saveTranslateUseCase};
