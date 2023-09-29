@@ -7,7 +7,7 @@ MongoDB.connect();
 
 const config = {
   executions: 0,
-  maxExecutions: 200,
+  maxExecutions: 100,
 };
 const progress = {
   errors: 0,
@@ -217,7 +217,7 @@ const subjects: string[] = [
 
 console.log(subjects.length);
 
-let indexSubjects = 80;
+let indexSubjects = 0;
 const intervalo = setInterval(async () => {
   const textCreated = await Create.execute(
     "en-US",
@@ -241,4 +241,4 @@ const intervalo = setInterval(async () => {
     clearInterval(intervalo);
     return;
   }
-}, 60000);
+}, 80000);

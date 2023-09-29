@@ -1,4 +1,4 @@
-const languageCodeToFlagAndCountry = {
+const languageHashmap = {
   "it-IT": {
     emoji: "🇮🇹",
     country: "Italy",
@@ -24,7 +24,7 @@ const languageCodeToFlagAndCountry = {
     country: "France",
     language: "French",
   },
-  "ar-AE": { // Novo idioma adicionado
+  "ar-AE": { 
     emoji: "🇦🇪",
     country: "United Arab Emirates",
     language: "Arabic (UAE)",
@@ -73,7 +73,40 @@ const languageCodeToFlagAndCountry = {
     emoji: "🇨🇳",
     country: "China",
     language: "Mandarin Chinese",
+  },  "is-IS": {
+    emoji: "🇮🇸",
+    country: "Iceland",
+    language: "Icelandic",
+  },
+  "pl-PL": {
+    emoji: "🇵🇱",
+    country: "Poland",
+    language: "Polish",
+  },
+  "ro-RO": {
+    emoji: "🇷🇴",
+    country: "Romania",
+    language: "Romanian",
+  },
+  "sv-SE": {
+    emoji: "🇸🇪",
+    country: "Sweden",
+    language: "Swedish",
+  },
+  "cy-GB": {
+    emoji: "🇬🇧",
+    country: "United Kingdom",
+    language: "Welsh",
+  },  "da-DK": {
+    emoji: "🇩🇰",
+    country: "Denmark",
+    language: "Danish",
+  },
+  "nl-BE": {
+    emoji: "🇧🇪",
+    country: "Belgium",
+    language: "Dutch",
   },
 };
 
-export default languageCodeToFlagAndCountry
+export default languageHashmap

@@ -1,4 +1,3 @@
-import { AudioStream } from "aws-sdk/clients/polly";
 
 export interface AudioGeneratorGateway {
   generatorAudio(

@@ -3,6 +3,9 @@ import { Language } from "../../../domain/language/Language";
 import LanguageModel from "./model/LanguageModel";
 
 export class LanguageMongoRepository implements LanguageRepository {
+  findAll(): Promise<(Language | null)[]> {
+    return LanguageModel.find({});
+  }
   findById(idLanguage: String): Promise<Language | null> {
     return LanguageModel.findOne({ id: idLanguage });
   }

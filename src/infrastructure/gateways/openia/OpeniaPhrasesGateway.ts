@@ -15,7 +15,7 @@ export class OpeniaPhrasesGateway implements PhrasesGeneratorGateway {
       messages: [
         {
           role: "user",
-          content: `create a json with an array of objects with all text sentences in ${fromLanguage} , where each sentence is an item in the array, structure {sentences:[{sentence:",", audio:""}, ...]}. Sentences must be short.
+          content: `create a json with an array of objects with all text sentences in ${fromLanguage} , where each sentence is an item in the array, structure {sentences:[{sentence:",", audio:""}, ...]}. sentences should be very short
           The text is as follows: ${text}`,
         },
       ],
@@ -24,8 +24,8 @@ export class OpeniaPhrasesGateway implements PhrasesGeneratorGateway {
 
     const result = he
       .decode(completion.choices[0].message.content as string)
-      .replace(/\\./g, "")
-      .replace(/\n/g, "");
+      .replace(/\n/g, "")
+
 
     return JSON.parse(result).sentences;
   }

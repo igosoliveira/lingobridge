@@ -1,3 +1,4 @@
+import { GetAvailableLanguages } from "../application/usecases/translations/GetAvailableLanguages";
 import { GetTranslation } from "../application/usecases/translations/GetTranslation";
 import { SaveTranslation } from "../application/usecases/translations/SaveTranslation";
 import { PhrasesMongoRepository } from "../infrastructure/repositories/mongodb/PhrasesMongoRepository";
@@ -13,4 +14,7 @@ const getTranslationsUseCase = new GetTranslation(translationRepository,textRepo
 const translatorRepository = new TranslatorMongoRepository();
 const saveTranslateUseCase = new SaveTranslation(translatorRepository);
 
-export  { getTranslationsUseCase ,saveTranslateUseCase};
+
+const getAvailableLanguagesUseCase = new GetAvailableLanguages(translationRepository)
+
+export  { getTranslationsUseCase ,saveTranslateUseCase, getAvailableLanguagesUseCase};

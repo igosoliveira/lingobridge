@@ -16,55 +16,52 @@ export class GetTranslation {
         input.fromLanguage,
         input.toLanguage
       );
-    const response = [];
 
-    for (const translation of translations) {
-      const {
-        source_id: sourceId,
-        translation_id: translationId,
-        phrases_id: phrasesId,
-        translation_phrases_id: translationPhrasesId,
-      } = translation;
+    const responsePromises: Promise<any>[] = translations.map(
+      async (translation) => {
+          const {
+            source_id: sourceId,
+            translation_id: translationId,
+            phrases_id: phrasesId,
+            translation_phrases_id: translationPhrasesId,
+          } = translation;
 
-      const sourceText = await this.textRepository.findById(
-        sourceId,
-        input.fromLanguage
-      );
-      const targetText = await this.textRepository.findById(
-        translationId,
-        input.toLanguage
-      );
-      const sourcePhrases = await this.phrasesRepository.findById(phrasesId);
-      const targetPhrases = await this.phrasesRepository.findById(
-        translationPhrasesId
-      );
+          const [sourceText, targetText, sourcePhrases, targetPhrases] =
+            await Promise.all([
+              this.textRepository.findById(sourceId, input.fromLanguage),
+              this.textRepository.findById(translationId, input.toLanguage),
+              this.phrasesRepository.findById(phrasesId),
+              this.phrasesRepository.findById(translationPhrasesId),
+            ]);
 
-      const sentences: Array<object> = [];
-      sourcePhrases?.sentences.forEach((phrase, index) => {
-        sentences.push({
-          [input.fromLanguage]: phrase,
-          [input.toLanguage]: targetPhrases?.sentences[index],
-        });
-      });
+          const sentences: Array<object> = [];
+          sourcePhrases?.sentences.forEach((phrase, index) => {
+            sentences.push({
+              [input.fromLanguage]: phrase,
+              [input.toLanguage]: targetPhrases?.sentences[index],
+            });
+          });
 
-      response.push({
-        language: {
-          sourceLanguage: sourceText?.language_id,
-          targetLanguage: targetText?.language_id,
-        },
-        phrases: sentences,
-        text: {
-          title: sourceText?.title,
-          content: sourceText?.content,
-          audio: sourceText?.audio_url,
-        },
-        translation: {
-          title: targetText?.title,
-          content: targetText?.content,
-        },
-      });
-    }
-    return response;
+          return {
+            language: {
+              sourceLanguage: sourceText?.language_id,
+              targetLanguage: targetText?.language_id,
+            },
+            phrases: sentences,
+            text: {
+              title: sourceText?.title,
+              content: sourceText?.content,
+              audio: sourceText?.audio_url,
+            },
+            translation: {
+              title: targetText?.title,
+              content: targetText?.content,
+            },
+          }
+         } )
+
+    const response = await Promise.all(responsePromises);
+    return response.filter((item) => item !== null);
   }
 }
 

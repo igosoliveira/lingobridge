@@ -8,4 +8,5 @@ translationRoutes.get(
   async (req: Request, res: Response) => await TranslationController.getTexts(req, res)
 );
 
+
 export { translationRoutes };

@@ -17,17 +17,19 @@ export class OpeniaGateway implements TextGeneratorGateway {
           role: "user",
           content: `create an interesting short text in ${language} ${
             subject ? "about " + subject : ""
-          } and return with this structure {title:"", content:""}`,
+          }. and return with this structure {title:"", content:""}. the return must be a valid JSON`,
         },
       ],
       model: "gpt-3.5-turbo",
     });
 
-    const textEnglish = he
-      .decode(completion.choices[0].message.content as string)
+    const textEnglish = (completion.choices[0].message.content as string)
+      .replace(/\.(\w)/g, ". $1")
       .replace(/\\./g, "")
-      .replace(/\n/g, "");
+      .replace(/\n/g, "");      
 
-    return JSON.parse(textEnglish);
+    const text = JSON.parse(JSON.parse(JSON.stringify(textEnglish)));
+
+    return text;
   }
 }

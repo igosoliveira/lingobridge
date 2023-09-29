@@ -22,6 +22,7 @@ export class GenerateAudio {
       return url;
     } catch (error) {
       console.log(error);
+      throw error
       return null;
     }
   }

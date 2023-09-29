@@ -9,55 +9,77 @@ import {
 } from "../../../di/text";
 
 export class Create {
-  static async execute(language: string = "en-US", subject: string = "") {
+  static async execute(language: string = `en-US`, subject: string = "") {
     try {
-      console.log("generating text");
+      const totalTasks = 8; // Total de tarefas no processo
+      let currentTask = 0; // Tarefa atual
+
+      const logProgress = () => {
+        return`[${new Date().toISOString()}] [${currentTask}/${totalTasks}] `;
+      };
+
+      console.log(`====================================`);
+      console.log(`Starting Text Generation Process`);
+      console.log(`====================================`);
+
+      currentTask++;
+
+      console.log(`${logProgress()}Generating text...`);
       const textGeneration = await generateTextUseCase.execute({
         language,
         subject,
       });
+      console.log(`Text generation successful.`);
       console.log(textGeneration);
-      console.log("Text created");
 
-      console.log("checking similarity");
+      currentTask++;
+
+      console.log(`${logProgress()}Checking similarity...`);
       const similarity = await checkSimilarityUseCase.execute({
         language,
         title: textGeneration.title,
         content: textGeneration.content,
       });
       if (similarity) {
-        throw Error("ERROR similarity text");
+        throw new Error(`ERROR: similar text.`);
       }
-      console.log(similarity);
-      console.log("Check similarity");
+      console.log(`Similarity check passed. ${similarity}`);
 
-      console.log("generating audio");
+      currentTask++;
+
+      console.log(`${logProgress()}Generating audio...`);
       const audioUrl = await generateAudio.execute({
         language: language,
         text: `${textGeneration.title}. ${textGeneration.content}`,
         name: new Date().getTime().toString(),
-        folder: `texts,${language}`,
+        folder: `texts/${language}`,
       });
+      console.log(`Audio generation successful.`);
       console.log(audioUrl);
-      console.log("Audio created");
 
+      currentTask++;
+
+      console.log(`${logProgress()}Creating Language...`);
       const languageCreated = await saveLanguageUseCase.execute({
         code: language,
       });
+      console.log(`Language created successfully.`);
       console.log(languageCreated);
-      console.log("Language created");
 
+      currentTask++;
+
+      console.log(`${logProgress()}Creating Subject...`);
       const subjectCreated = await saveSubjectUseCase.execute({ subject });
+      console.log(`Subject created successfully.`);
       console.log(subjectCreated);
-      console.log("Subject created");
 
-      console.log("generate sentences");
+      currentTask++;
+
+      console.log(`${logProgress()}Generating sentences...`);
       const sentences = await generatePhrases.generate(
         textGeneration.content,
         language
       );
-      console.log(sentences);
-      console.log("sentences created");
 
       const newSentences = [];
       for (const sentence of sentences) {
@@ -67,17 +89,24 @@ export class Create {
           name: new Date().getTime().toString(),
           folder: `sentences/${language}`,
         });
-
         newSentences.push({ ...sentence, audio: audioUrl });
       }
+      console.log(`Sentences generated successfully.`);
+      console.log(newSentences);
 
+      currentTask++;
+
+      console.log(`${logProgress()}Saving Phrases...`);
       const phrases = await savePhrasesUseCase.execute({
         language_id: language,
         phrases: newSentences,
       });
+      console.log(`Phrases saved successfully.`);
       console.log(phrases);
-      console.log("sentences created");
 
+      currentTask++;
+
+      console.log(`${logProgress()}Creating Text...`);
       const textCreated = await saveTextUseCase.execute({
         language_id: language,
         title: textGeneration.title,
@@ -86,13 +115,21 @@ export class Create {
         subject_id: subjectCreated.id,
         phrases_id: phrases.id,
       });
-
+      console.log(`Text created successfully.`);
       console.log(textCreated);
-      console.log("Text created");
+
+      currentTask++;
+
+      console.log(`====================================`);
+      console.log(`Text Generation Process Completed`);
+      console.log(`====================================`);
 
       return { textCreated };
     } catch (error) {
-      console.error(`[${new Date().toISOString()}] An error occurred:`, error);
+      console.error(`====================================`);
+      console.error(`[${new Date().toISOString()}] An error occurred:`);
+      console.error(error);
+      console.error(`====================================`);
       return { error };
     }
   }

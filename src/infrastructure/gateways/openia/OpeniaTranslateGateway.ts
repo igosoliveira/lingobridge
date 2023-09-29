@@ -16,18 +16,14 @@ export class OpeniaTranslateGateway implements TranslatorGateway {
       messages: [
         {
           role: "user",
-          content: `translate title ${title} and text ${content} to ${language} and return with this structure {title:"", content:""}`,
+          content: `translate title ${title} and text ${content} to ${language} and return with this structure {title:"", content:""}. the return must be a valid JSON`,
         },
       ],
       model: "gpt-3.5-turbo",
     });
 
-    const textEnglish = he
-      .decode(completion.choices[0].message.content as string)
-      .replace(/\\./g, "")
-      .replace(/\n/g, "");
-    
-    const text = JSON.parse(textEnglish);
+    const textEnglish = (completion.choices[0].message.content as string)
+    const text = JSON.parse(JSON.parse(JSON.stringify(textEnglish)));
     return text;
   }
 }

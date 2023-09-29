@@ -2,8 +2,17 @@ import { TranslatorRepository } from "../../../application/repositories/Translat
 import { Translation } from "../../../domain/translation/Translation";
 import TranslationModel from "./model/TranslationModel";
 
-export class TranslatorMongoRepository implements TranslatorRepository {  
-  async getAllByLanguage(fromLanguage: String, toLanguage: String): Promise<any> {
+export class TranslatorMongoRepository implements TranslatorRepository {
+  getAvailableLanguages(language: string): Promise<any> {
+    return TranslationModel.distinct("translation_language_id", {
+      source_language_id: language,
+      translation_language_id: { $ne: language },
+    });
+  }
+  async getAllByLanguage(
+    fromLanguage: String,
+    toLanguage: String
+  ): Promise<any> {
     return TranslationModel.find({
       translation_language_id: toLanguage,
       source_language_id: fromLanguage,

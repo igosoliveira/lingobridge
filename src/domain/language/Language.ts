@@ -1,4 +1,4 @@
-import languageCodeToFlagAndCountry from "./hashMap";
+import languageHashmap from "./hashMap";
 
 export class Language {
   id: string;
@@ -46,8 +46,8 @@ export class Language {
   }
 
   static createFromCode(code: string) {
-    if (languageCodeToFlagAndCountry.hasOwnProperty(code)) {
-      const { emoji, country, language} = languageCodeToFlagAndCountry[code as keyof typeof languageCodeToFlagAndCountry];
+    if (languageHashmap.hasOwnProperty(code)) {
+      const { emoji, country, language} = languageHashmap[code as keyof typeof languageHashmap];
       return new Language(code, code, emoji, country, language, new Date(), new Date());
     } else {
       throw new Error(`Código de idioma "${code}" não encontrado.`);
