@@ -15,12 +15,6 @@ export class Translate {
 
   static async execute(sourceLanguage: string, targetLanguage: string) {
     try {
-      const languageCreated = await saveLanguageUseCase.execute({
-        code: targetLanguage,
-      });
-      console.log(languageCreated);
-      console.log("Language created");
-
       console.log("get untranslated texts");
       const texts = await findUntranslatedTextUseCase.execute({
         language: sourceLanguage,
@@ -97,10 +91,16 @@ export class Translate {
             translation_id: textCreated.id,
             translation_language_id: textCreated.language_id,
             phrases_id: text.phrases_id,
-            translation_phrases_id: phrases.id
+            translation_phrases_id: phrases.id,
           });
           console.log(translate);
           console.log("translation created");
+
+          const languageCreated = await saveLanguageUseCase.execute({
+            code: targetLanguage,
+          });
+          console.log(languageCreated);
+          console.log("Language created");
         } catch (error) {
           console.error(
             `[${new Date().toISOString()}] Task ${i + 1}/${
@@ -111,7 +111,7 @@ export class Translate {
         }
 
         if (i < texts.length - 1) {
-          await this.pause(20);
+          await this.pause(30);
         }
       }
 
