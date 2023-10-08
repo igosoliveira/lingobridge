@@ -1,4 +1,4 @@
-import { GetAvailableLanguages } from "../application/usecases/translations/GetAvailableLanguages";
+import { GetAvailableLanguages } from "../application/usecases/language/GetAvailableLanguages";
 import { GetTranslation } from "../application/usecases/translations/GetTranslation";
 import { SaveTranslation } from "../application/usecases/translations/SaveTranslation";
 import { PhrasesMongoRepository } from "../infrastructure/repositories/mongodb/PhrasesMongoRepository";
