@@ -24,9 +24,9 @@ export class OpeniaGateway implements TextGeneratorGateway {
     });
 
     const textEnglish = (completion.choices[0].message.content as string)
-      .replace(/\.(\w)/g, ". $1")
+      .replace(/\n/g, "")
       .replace(/\\./g, "")
-      .replace(/\n/g, "");      
+      .replace(/\.(\w)/g, ". $1");
 
     const text = JSON.parse(JSON.parse(JSON.stringify(textEnglish)));
 
