@@ -19,46 +19,42 @@ export class GetTranslation {
 
     const responsePromises: Promise<any>[] = translations.map(
       async (translation) => {
-          const {
-            source_id: sourceId,
-            translation_id: translationId,
-            phrases_id: phrasesId,
-            translation_phrases_id: translationPhrasesId,
-          } = translation;
+        const { text, translation: translator } = translation;
 
-          const [sourceText, targetText, sourcePhrases, targetPhrases] =
-            await Promise.all([
-              this.textRepository.findById(sourceId, input.fromLanguage),
-              this.textRepository.findById(translationId, input.toLanguage),
-              this.phrasesRepository.findById(phrasesId),
-              this.phrasesRepository.findById(translationPhrasesId),
-            ]);
+        const [sourceText, targetText, sourcePhrases, targetPhrases] =
+          await Promise.all([
+            this.textRepository.findById(text.id, input.fromLanguage),
+            this.textRepository.findById(translator.id, input.toLanguage),
+            this.phrasesRepository.findById(text.phrases_id),
+            this.phrasesRepository.findById(translator.phrases_id),
+          ]);
 
-          const sentences: Array<object> = [];
-          sourcePhrases?.sentences.forEach((phrase, index) => {
-            sentences.push({
-              [input.fromLanguage]: phrase,
-              [input.toLanguage]: targetPhrases?.sentences[index],
-            });
+        const sentences: Array<object> = [];
+        sourcePhrases?.sentences.forEach((phrase, index) => {
+          sentences.push({
+            [input.fromLanguage]: phrase,
+            [input.toLanguage]: targetPhrases?.sentences[index],
           });
+        });
 
-          return {
-            language: {
-              sourceLanguage: sourceText?.language_id,
-              targetLanguage: targetText?.language_id,
-            },
-            phrases: sentences,
-            text: {
-              title: sourceText?.title,
-              content: sourceText?.content,
-              audio: sourceText?.audio_url,
-            },
-            translation: {
-              title: targetText?.title,
-              content: targetText?.content,
-            },
-          }
-         } )
+        return {
+          language: {
+            sourceLanguage: sourceText?.language_id,
+            targetLanguage: targetText?.language_id,
+          },
+          phrases: sentences,
+          text: {
+            title: sourceText?.title,
+            content: sourceText?.content,
+            audio: sourceText?.audio_url,
+          },
+          translation: {
+            title: targetText?.title,
+            content: targetText?.content,
+          },
+        };
+      }
+    );
 
     const response = await Promise.all(responsePromises);
     return response.filter((item) => item !== null);

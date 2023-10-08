@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import {
-  getTranslationsUseCase,
-} from "../../di/translation";
+import { getTranslationsUseCase } from "../../di/translation";
 
 export class TranslationController {
   static async getTexts(
@@ -20,5 +18,4 @@ export class TranslationController {
     });
     return reponse.send(texts).status(200);
   }
-
 }

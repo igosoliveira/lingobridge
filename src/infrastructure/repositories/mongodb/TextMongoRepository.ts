@@ -24,8 +24,8 @@ export class TextMongoRepository implements TextRepository {
     return TextModel.find({
       language_id: language,
       id: {
-        $nin: await TranslationModel.distinct("source_id", {
-          translation_language_id: toLanguage,
+        $nin: await TranslationModel.distinct("text.id", {
+          "translation.language_id": toLanguage,
         }),
       },
     });
