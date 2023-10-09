@@ -8,7 +8,7 @@ export class GetAvailableLanguages {
     const languages = await this.translatorRepository.getAvailableLanguages(
       input.language
     );
-    return languages.map((language) => {
+    return languages.map((language: string) => {
       return {
         ...languageHashmap[language as keyof typeof languageHashmap],
         code: language,

@@ -7,7 +7,7 @@ export class TranslatorMongoRepository implements TranslatorRepository {
     return TranslationModel.distinct("translation.language_id", {
       "text.language_id": language,
       "translation.language_id": { $ne: language },
-    });
+    }).lean();
   }
 
   async getAllByLanguage(
@@ -17,27 +17,28 @@ export class TranslatorMongoRepository implements TranslatorRepository {
     return TranslationModel.find({
       "text.language_id": fromLanguage,
       "translation.language_id": toLanguage,
-    });
+    }).lean();
   }
-  async save(translation: Translation): Promise<void> {
-    await TranslationModel.create(translation);
+  async save(translation: Translation): Promise<Translation> {
+    return TranslationModel.create(translation);
   }
 
-  getMainTranslation(
-    language: String,
-    id: String
-  ): Promise<Translation | null> {
+  getMain(language: String, id: String): Promise<Translation | null> {
     return TranslationModel.findOne({
       "text.language_id": "en-US",
       "text.id": id,
       "translation.language_id": language,
-    });
+    }).lean();
   }
 
-  getAllMainTranslation(language: String): Promise<Array<Translation>> {
+  getAllMain(language: String): Promise<Array<Translation>> {
     return TranslationModel.find({
       "text.language_id": "en-US",
       "translation.language_id": language,
-    });
+    }).lean();
+  }
+
+  find(query: Object): Promise<Translation | null > {
+    return TranslationModel.findOne(query).lean();
   }
 }

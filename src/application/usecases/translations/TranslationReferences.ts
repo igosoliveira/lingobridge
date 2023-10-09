@@ -1,45 +1,53 @@
 import { Translation } from "../../../domain/translation/Translation";
-import { TextRepository } from "../../repositories/TextRepository";
 import { TranslatorRepository } from "../../repositories/TranslatorRepository";
 
 export class TranslationReferences {
-  constructor(
-    readonly translatorRepository: TranslatorRepository,
-    readonly textRepository: TextRepository
-  ) {}
+  constructor(readonly translatorRepository: TranslatorRepository) {}
 
   async execute(input: Input) {
-    const sourceMainTranslations =
-      await this.translatorRepository.getAllMainTranslation(input.fromLanguage);
+    const sourceTranslations = await this.translatorRepository.getAllMain(
+      input.from
+    );
+    console.log(`para traduzir (${sourceTranslations.length})`);
+    let count = 0;
 
-    for (const sourceMainTranslation of sourceMainTranslations) {
-      const {
-        translation_id,
-        translation_language_id,
-        translation_phrases_id,
-        source_id,
-      } = sourceMainTranslation;
-
-      const targetMain = await this.translatorRepository.getMainTranslation(
-        input.toLanguage,
-        source_id
+    for (const sourceTranslation of sourceTranslations) {
+      const targetTranlation = await this.translatorRepository.getMain(
+        input.to,
+        sourceTranslation.text.id
       );
 
-      
+      if (!targetTranlation) {
+        console.log("traducao nao encontrada");
+        console.log(sourceTranslation);
+        continue;
+      }
+
+      const newTranslation = Translation.create(
+        sourceTranslation.translation,
+        targetTranlation.translation
+      );
+
+      const exists = await this.translatorRepository.find({
+        text: newTranslation.text,
+        translation: newTranslation.translation,
+      });
+
+      if (exists) {
+        console.log("traducao ja existe");
+        continue;
+      }
+
+      await this.translatorRepository.save(newTranslation);
+      count++;
+      console.log(`${count} texto traduzido`);
     }
   }
 }
 
 type Input = {
-  toLanguage: string;
-  fromLanguage: string;
+  to: string;
+  from: string;
 };
 
 type Output = Array<any>;
-//pegar linguagens que nao seja en-US
-
-//interar sobre elas
-//buscar colection de translate todos as traducoes {translate_language = languageFrom}
-//intera
-//buscar texto na languageFrom
-//mudar as referencias
